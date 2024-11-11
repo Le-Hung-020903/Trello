@@ -1,38 +1,62 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import eslintPluginReact from "eslint-plugin-react";
+import eslintPluginReactHooks from "eslint-plugin-react-hooks";
+import eslintPluginReactRefresh from "eslint-plugin-react-refresh";
+import babelParser from "@babel/eslint-parser";
 
 export default [
-  { ignores: ['dist'] },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["**/*.js", "**/*.jsx"],
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      parser: babelParser,
       parserOptions: {
-        ecmaVersion: 'latest',
+        ecmaVersion: "latest",
+        sourceType: "module",
         ecmaFeatures: { jsx: true },
-        sourceType: 'module',
+        babelOptions: {
+          presets: ["@babel/preset-react"],
+        },
+      },
+      globals: {
+        browser: true,
+        es2020: true,
+        node: true,
       },
     },
-    settings: { react: { version: '18.3' } },
     plugins: {
-      react,
-      'react-hooks': reactHooks,
-      'react-refresh': reactRefresh,
+      react: eslintPluginReact,
+      "react-hooks": eslintPluginReactHooks,
+      "react-refresh": eslintPluginReactRefresh,
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...react.configs.recommended.rules,
-      ...react.configs['jsx-runtime'].rules,
-      ...reactHooks.configs.recommended.rules,
-      'react/jsx-no-target-blank': 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      "react-refresh/only-export-components": "warn",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "react/prop-types": "off",
+      "react/display-name": "off",
+
+      "no-console": "warn",
+      "no-lonely-if": "warn",
+      "no-unused-vars": "warn",
+      "no-trailing-spaces": "warn",
+      "no-multi-spaces": "warn",
+      "no-multiple-empty-lines": "warn",
+      "space-before-blocks": ["error", "always"],
+      "object-curly-spacing": ["warn", "always"],
+      indent: ["warn", 2],
+      semi: ["warn", "never"],
+      quotes: ["error", "single"],
+      "array-bracket-spacing": "warn",
+      "linebreak-style": "off",
+      "no-unexpected-multiline": "warn",
+      "keyword-spacing": "warn",
+      "comma-dangle": "warn",
+      "comma-spacing": "warn",
+      "arrow-spacing": "warn",
+    },
+    settings: {
+      react: {
+        version: "18.2",
+      },
     },
   },
-]
+];
