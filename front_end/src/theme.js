@@ -5,8 +5,8 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   // cssVariables: true,
   trelloCustom: {
-    appBarHeight: "48px",
-    boardBarHeight: "58px",
+    appBarHeight: "58px",
+    boardBarHeight: "60px",
   },
   colorSchemes: {
     light: {
@@ -19,6 +19,15 @@ const theme = createTheme({
       palette: {
         primary: cyan,
         secondary: orange,
+      },
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
       },
     },
   },

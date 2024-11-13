@@ -10,7 +10,8 @@ import InputLabel from "@mui/material/InputLabel";
 import Box from "@mui/material/Box";
 
 function ModeSelect() {
-  const { mode, setMode } = useColorScheme();
+  const { mode = "light", setMode } = useColorScheme(); // Default to "light" if mode is undefined
+
   return (
     <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
       <InputLabel id="demo-select-small-label">Mode</InputLabel>
@@ -18,13 +19,13 @@ function ModeSelect() {
         labelId="demo-select-small-label"
         id="demo-select-small"
         value={mode}
-        label="mode"
+        label="Mode"
         onChange={(e) => setMode(e.target.value)}
       >
         <MenuItem value="light">
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <LightModeSharpIcon />
-            light
+            Light
           </Box>
         </MenuItem>
         <MenuItem value="dark">
