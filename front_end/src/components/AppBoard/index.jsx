@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import ModeSelect from "~/components/ModeSelect";
 import AppsIcon from "@mui/icons-material/Apps";
@@ -14,7 +14,12 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import Tooltip from "@mui/material/Tooltip";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import Profiles from "./Menus/Profiles";
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from "@mui/icons-material/Search";
+import ClearIcon from "@mui/icons-material/Clear";
 const AppBoard = () => {
+  const [search, setSearch] = useState("");
   return (
     <Box
       px={2}
@@ -24,32 +29,85 @@ const AppBoard = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        gap: 2,
+        overflowX: "auto",
+        bgcolor: (theme) =>
+          theme.palette.mode === "dark" ? "#2c3e50" : "#1565c0",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <AppsIcon sx={{ color: "primary.main" }} />
+        <AppsIcon sx={{ color: "white" }} />
         <Typography
           variant="span"
-          sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "primary.main" }}
+          sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "white" }}
         >
           Trello
         </Typography>
-        <Workspaces />
-        <Recent />
-        <Starred />
-        <Templates />
-        <Button variant="outlined">Create</Button>
+        <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
+          <Workspaces />
+          <Recent />
+          <Starred />
+          <Templates />
+          <Button
+            variant="outlined"
+            startIcon={<LibraryAddIcon />}
+            sx={{
+              color: "white",
+              border: "none",
+              "&:hover": {
+                border: "none",
+              },
+            }}
+          >
+            Create
+          </Button>
+        </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         <TextField
           id="outlined-search"
           label="Search..."
-          type="search"
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           size="small"
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: "white" }} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <ClearIcon
+                  fontSize="small"
+                  sx={{ color: "white", cursor: "pointer" }}
+                  onClick={() => setSearch("")}
+                />
+              ),
+            },
+          }}
+          sx={{
+            minWidth: "120px",
+            "& label": { color: "white" },
+            "& input": { color: "white" },
+            "& label.Mui-focused": { color: "white" },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white",
+              },
+              "&:hover fieldset": {
+                borderColor: "white",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "white",
+              },
+            },
+          }}
         />
         <ModeSelect />
         <Tooltip title="Notification">
-          <Badge color="secondary" variant="dot" sx={{ cursor: "pointer" }}>
+          <Badge color="warning" variant="dot" sx={{ cursor: "pointer" }}>
             <NotificationsNoneIcon />
           </Badge>
         </Tooltip>
