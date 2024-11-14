@@ -37,7 +37,7 @@ const BoardBar = () => {
         overflowX: "auto",
         borderBottom: "1px solid white",
         bgcolor: (theme) =>
-          theme.palette.mode === "dark" ? "#2c3e50" : "#1976D2",
+          theme.palette.mode === "dark" ? "#34495e" : "#1976D2",
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -90,6 +90,7 @@ const BoardBar = () => {
                 height: 34,
                 fontSize: 16,
                 border: "none",
+                cursor: "pointer",
               },
             }}
           >
