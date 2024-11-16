@@ -1,8 +1,11 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import ListColumns from "./ListColumns/ListColumns";
+import { sortColumn } from "~/utils/sortColumn";
 
-const BoardContent = () => {
+const BoardContent = (props) => {
+  const board = props.board;
+  const sortColumns = sortColumn(board?.columns, board?.columnOrderIds, "_id");
   return (
     <Box
       sx={{
@@ -16,7 +19,7 @@ const BoardContent = () => {
         p: "10px 0",
       }}
     >
-      <ListColumns />
+      <ListColumns listColumns={sortColumns} />
     </Box>
   );
 };

@@ -2,7 +2,8 @@ import React from "react";
 import Box from "@mui/material/Box";
 import CardItem from "./Card/Card";
 
-const ListCards = () => {
+const ListCards = (props) => {
+  const listCards = props.listCards;
   return (
     <Box
       sx={{
@@ -27,7 +28,9 @@ const ListCards = () => {
         },
       }}
     >
-      <CardItem />
+      {listCards?.map((card) => (
+        <CardItem key={card._id} cardItem={card} />
+      ))}
     </Box>
   );
 };

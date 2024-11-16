@@ -17,7 +17,9 @@ import CloudIcon from "@mui/icons-material/Cloud";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListCards from "./ListCards/ListCards";
-const Column = () => {
+import { sortColumn } from "~/utils/sortColumn";
+const Column = (props) => {
+  const column = props.column;
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -26,6 +28,8 @@ const Column = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const sortCard = sortColumn(column?.cards, column?.cardOrderIds, "_id");
+
   return (
     <Box
       sx={{
@@ -118,8 +122,10 @@ const Column = () => {
           </Menu>
         </Box>
       </Box>
-      {/* cards column */}
-      <ListCards />
+      {/* list column */}
+
+      <ListCards listCards={sortCard} />
+
       {/* footer column */}
       <Box
         sx={{

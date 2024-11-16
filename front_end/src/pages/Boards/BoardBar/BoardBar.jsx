@@ -9,7 +9,7 @@ import AvatarGroup from "@mui/material/AvatarGroup";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-
+import { capitalize } from "~/utils/formatters";
 const menu_styles = {
   color: "white",
   bgcolor: "transparent",
@@ -23,7 +23,8 @@ const menu_styles = {
     bgcolor: "primary.50",
   },
 };
-const BoardBar = () => {
+const BoardBar = (props) => {
+  const data = props.board;
   return (
     <Box
       sx={{
@@ -43,13 +44,13 @@ const BoardBar = () => {
         <Chip
           sx={menu_styles}
           icon={<Dashboard />}
-          label="Đình Hùng Full Stack"
+          label={data?.title}
           clickable
         ></Chip>
         <Chip
           sx={menu_styles}
           icon={<VpnLockIcon />}
-          label="Public/Private Workspace"
+          label={capitalize(data?.type)}
           clickable
         ></Chip>
         <Chip

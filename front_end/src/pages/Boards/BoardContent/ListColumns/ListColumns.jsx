@@ -3,8 +3,9 @@ import Box from "@mui/material/Box";
 import Column from "./Column/Column";
 import Button from "@mui/material/Button";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+const ListColumns = (props) => {
+  const listColumns = props.listColumns;
 
-const ListColumns = () => {
   return (
     <Box
       sx={{
@@ -17,7 +18,9 @@ const ListColumns = () => {
         "&::-webkit-scrollbar-track": { m: 2 },
       }}
     >
-      <Column />
+      {listColumns?.map((column) => (
+        <Column column={column} key={column?._id} />
+      ))}
       <Box
         sx={{
           minWidth: "200px",
