@@ -3,47 +3,56 @@ import Box from "@mui/material/Box";
 import Column from "./Column/Column";
 import Button from "@mui/material/Button";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+} from "@dnd-kit/sortable";
 const ListColumns = (props) => {
   const listColumns = props.listColumns;
 
   return (
-    <Box
-      sx={{
-        bgcolor: "inherit",
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        overflowX: "auto",
-        overflowY: "auto",
-        "&::-webkit-scrollbar-track": { m: 2 },
-      }}
+    <SortableContext
+      items={listColumns?.map((item) => item?._id)}
+      strategy={horizontalListSortingStrategy}
     >
-      {listColumns?.map((column) => (
-        <Column column={column} key={column?._id} />
-      ))}
       <Box
         sx={{
-          minWidth: "200px",
-          maxWidth: "200px",
-          mx: 2,
-          borderRadius: "6px",
-          height: "fit-content",
-          bgcolor: "#ffffff3d",
+          bgcolor: "inherit",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          overflowX: "auto",
+          overflowY: "auto",
+          "&::-webkit-scrollbar-track": { m: 2 },
         }}
       >
-        <Button
-          startIcon={<NoteAddIcon />}
+        {listColumns?.map((column) => (
+          <Column column={column} key={column?._id} />
+        ))}
+        <Box
           sx={{
-            color: "white",
-            width: "100%",
-            justifyContent: "flex-start",
-            pl: 2.5,
+            minWidth: "200px",
+            maxWidth: "200px",
+            mx: 2,
+            borderRadius: "6px",
+            height: "fit-content",
+            bgcolor: "#ffffff3d",
           }}
         >
-          Add new column
-        </Button>
+          <Button
+            startIcon={<NoteAddIcon />}
+            sx={{
+              color: "white",
+              width: "100%",
+              justifyContent: "flex-start",
+              pl: 2.5,
+            }}
+          >
+            Add new column
+          </Button>
+        </Box>
       </Box>
-    </Box>
+    </SortableContext>
   );
 };
 
