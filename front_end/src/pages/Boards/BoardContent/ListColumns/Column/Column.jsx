@@ -80,7 +80,7 @@ const Column = (props) => {
           }}
         >
           <Typography sx={{ fontWeight: "bold", cursor: "pointer" }}>
-            Column Title
+            {column?.title}
           </Typography>
           <Box>
             <Tooltip title="More options">

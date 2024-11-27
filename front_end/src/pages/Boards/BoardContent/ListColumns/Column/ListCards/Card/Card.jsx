@@ -10,7 +10,7 @@ import ModeCommentIcon from "@mui/icons-material/ModeComment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Opacity } from "@mui/icons-material";
+// import { Opacity } from "@mui/icons-material";
 const CardItem = (props) => {
   const cardItem = props.cardItem;
   const {
@@ -29,7 +29,13 @@ const CardItem = (props) => {
     opacity: isDragging ? 0.5 : undefined,
     border: isDragging ? "1px solid #0652DD" : undefined,
   };
-
+  const shouldShowCardActions = () => {
+    return (
+      !!cardItem?.memberIds?.length ||
+      !!cardItem?.comments?.length ||
+      !!cardItem?.attachments?.length
+    );
+  };
   return (
     <Card
       ref={setNodeRef}
@@ -40,6 +46,7 @@ const CardItem = (props) => {
         cursor: "pointer",
         boxShadow: "0 1px 1px rgba(0,0,0,0.2)",
         overflow: "unset",
+        display: cardItem?.FE_PlaceholderCard ? "none" : "block",
       }}
     >
       {cardItem?.cover && (
@@ -53,17 +60,25 @@ const CardItem = (props) => {
       <CardContent sx={{ p: 1.5, "&:last-child": { p: 1.5 } }}>
         <Typography>{cardItem?.title}</Typography>
       </CardContent>
-      <CardActions sx={{ justifyContent: "space-between" }}>
-        <Button startIcon={<GroupIcon />} size="small">
-          {cardItem?.memberIds.length ?? 0}
-        </Button>
-        <Button startIcon={<ModeCommentIcon />} size="small">
-          {cardItem?.comments.length ?? 0}
-        </Button>
-        <Button startIcon={<AttachmentIcon />} size="small">
-          {cardItem?.attachments.length ?? 0}
-        </Button>
-      </CardActions>
+      {shouldShowCardActions() && (
+        <CardActions sx={{ justifyContent: "space-between" }}>
+          {cardItem?.memberIds?.length && (
+            <Button startIcon={<GroupIcon />} size="small">
+              {cardItem?.memberIds?.length}
+            </Button>
+          )}
+          {cardItem?.comments?.length && (
+            <Button startIcon={<ModeCommentIcon />} size="small">
+              {cardItem?.comments?.length}
+            </Button>
+          )}
+          {cardItem?.attachments?.length && (
+            <Button startIcon={<AttachmentIcon />} size="small">
+              {cardItem?.attachments?.length}
+            </Button>
+          )}
+        </CardActions>
+      )}
     </Card>
   );
 };

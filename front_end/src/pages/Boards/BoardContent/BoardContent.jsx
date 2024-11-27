@@ -14,11 +14,12 @@ import {
   getFirstCollision,
 } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { cloneDeep } from "lodash";
+import { cloneDeep, isEmpty } from "lodash";
 import ListColumns from "./ListColumns/ListColumns";
 import { sortColumn } from "~/utils/sortColumn";
 import Column from "./ListColumns/Column/Column";
 import CardItem from "./ListColumns/Column/ListCards/Card/Card";
+import { generatePlaceholder } from "~/utils/formatters";
 
 const ACTIVE_DARG_ITEM_TYPE = {
   COLUMN: "ACTIVE_DARG_ITEM_TYPE_COLUMN",
@@ -81,6 +82,9 @@ const BoardContent = (props) => {
         nextActiveColumn.cards = nextActiveColumn?.cards?.filter(
           (card) => card._id !== activeDraggingCardId
         );
+        if (isEmpty(nextActiveColumn.cards)) {
+          nextActiveColumn.cards = [generatePlaceholder(nextActiveColumn)];
+        }
 
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextActiveColumn.cardOrderIds = nextActiveColumn?.cards?.map(
@@ -94,16 +98,21 @@ const BoardContent = (props) => {
         nextOverColumn.cards = nextOverColumn?.cards?.filter(
           (card) => card._id !== activeDraggingCardId
         );
-
         // Thêm active card đang kéo vào over column index mới
         nextOverColumn.cards = nextOverColumn?.cards?.toSpliced(
           overCardIndex,
           0,
           { ...activeDraggingCardData, columnId: nextOverColumn._id }
         );
+        // xoá placeholder card đi nếu tồn tại
+        nextOverColumn.cards = nextOverColumn?.cards?.filter(
+          (card) => !card?.FE_PlaceholderCard
+        );
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn?.cards?.map((c) => c?._id);
       }
+      console.log("next column: ", nextColumns);
+
       return nextColumns;
     });
   };
