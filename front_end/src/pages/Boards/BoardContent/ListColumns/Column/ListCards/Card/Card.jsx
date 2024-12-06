@@ -10,7 +10,6 @@ import ModeCommentIcon from "@mui/icons-material/ModeComment";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-// import { Opacity } from "@mui/icons-material";
 const CardItem = (props) => {
   const cardItem = props.cardItem;
   const {
@@ -47,6 +46,8 @@ const CardItem = (props) => {
         boxShadow: "0 1px 1px rgba(0,0,0,0.2)",
         overflow: "unset",
         display: cardItem?.FE_PlaceholderCard ? "none" : "block",
+        border: "1px solid transparent",
+        "&:hover": {borderColor: (theme) => theme.palette.primary.main}
       }}
     >
       {cardItem?.cover && (

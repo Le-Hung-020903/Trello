@@ -79,11 +79,13 @@ const AppBoard = () => {
                 </InputAdornment>
               ),
               endAdornment: (
-                <ClearIcon
-                  fontSize="small"
-                  sx={{ color: "white", cursor: "pointer" }}
-                  onClick={() => setSearch("")}
-                />
+                <InputAdornment position="start">
+                  <ClearIcon
+                    fontSize="small"
+                    sx={{ color: "white", cursor: "pointer" }}
+                    onClick={() => setSearch("")}
+                  />
+                </InputAdornment>
               ),
             },
           }}

@@ -10,6 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { capitalize } from "~/utils/formatters";
+import { Tooltip } from "@mui/material";
 const menu_styles = {
   color: "white",
   bgcolor: "transparent",
@@ -24,7 +25,8 @@ const menu_styles = {
   },
 };
 const BoardBar = (props) => {
-  const data = props.board;
+  const data = props.board?.data;
+  
   return (
     <Box
       sx={{
@@ -41,12 +43,14 @@ const BoardBar = (props) => {
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Chip
-          sx={menu_styles}
-          icon={<Dashboard />}
-          label={data?.title}
-          clickable
-        ></Chip>
+        <Tooltip title={data?.description}>
+          <Chip
+            sx={menu_styles}
+            icon={<Dashboard />}
+            label={data?.title}
+            clickable
+          ></Chip>
+        </Tooltip>
         <Chip
           sx={menu_styles}
           icon={<VpnLockIcon />}

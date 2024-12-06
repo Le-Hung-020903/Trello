@@ -1,0 +1,7 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    "@babel/plugin-transform-runtime", // Sửa lại tên plugin này
+    ["module-resolver", { "alias": { "~": "./src" } }]
+  ]
+}

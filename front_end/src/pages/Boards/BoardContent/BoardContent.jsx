@@ -2,17 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import {
   DndContext,
-  MouseSensor,
-  TouchSensor,
+  // MouseSensor,
+  // TouchSensor,
   useSensor,
   useSensors,
   DragOverlay,
   closestCorners,
-  // closestCenter,
   pointerWithin,
-  // rectIntersection,
   getFirstCollision,
 } from "@dnd-kit/core";
+import { TouchSensor, MouseSensor } from "../../../customLibraries/DndKitSensors"
 import { arrayMove } from "@dnd-kit/sortable";
 import { cloneDeep, isEmpty } from "lodash";
 import ListColumns from "./ListColumns/ListColumns";
@@ -26,7 +25,7 @@ const ACTIVE_DARG_ITEM_TYPE = {
   CARD: "ACTIVE_DARG_ITEM_TYPE_CARD",
 };
 const BoardContent = (props) => {
-  const board = props.board;
+  const board = props.board?.data;
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
