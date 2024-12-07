@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes")
-const { successResponse, errorsResponse } = require("../utils/response")
-const ApiError = require("../utils/ApiError")
-const boardService = require("../services/boardService")
+const { successResponse } = require("~/utils/response")
+const ApiError = require("~/utils/ApiError")
+const boardService = require("~/services/boardService")
 module.exports = {
   createNew: async (req, res, next) => {
     try {

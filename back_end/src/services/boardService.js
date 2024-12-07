@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes")
-const {cloneDeep} = require("lodash")
+const { cloneDeep } = require("lodash")
 const { slugify } = require("../utils/formatter")
 const boardModel = require("../model/boardModel")
 const ApiError = require("~/utils/ApiError")

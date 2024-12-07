@@ -1,5 +1,5 @@
 const Joi = require("joi")
-const { ObjectId } = require("mongodb")
+const { ObjectId, ReturnDocument } = require("mongodb")
 const {
   OBJECT_ID_RULE,
   OBJECT_ID_RULE_MESSAGE
@@ -44,6 +44,7 @@ const findOneById = async (id) => {
     throw new Error(e)
   }
 }
+
 // query tổng hợp
 const getDetail = async (id) => {
   try {
@@ -80,10 +81,33 @@ const getDetail = async (id) => {
   }
 }
 
+export const pushColumnOrderIds = async (column) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(column.boardId)
+        },
+        {
+          $push: {
+            columnOrderIds: new ObjectId(column._id)
+          }
+        },
+        {
+          returnDocument: "after"
+        }
+      )
+      return result.value
+  } catch (e) {
+    throw new Error(e)
+  }
+}
 module.exports = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
-  getDetail
+  getDetail,
+  pushColumnOrderIds
 }
