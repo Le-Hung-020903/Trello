@@ -11,5 +11,8 @@ router
   })
   .post(boardValidation.createNew, boardController.createNew)
 
-router.route("/:id").get(boardController.getDetail)
+router
+  .route("/:id")
+  .get(boardController.getDetail)
+  .put(boardValidation.update, boardController.update)
 module.exports = router

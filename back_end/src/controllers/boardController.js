@@ -37,5 +37,19 @@ module.exports = {
       } catch (e) {
         next(e)
       }
+  },
+  update: async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const updatedBoard = await boardService.update(id, req.body)
+       return successResponse(
+        res,
+        StatusCodes.OK,
+        "Get board detail successfully",
+        updatedBoard
+       )
+    } catch (e) {
+      next(e)
+    }
   }
 }

@@ -20,6 +20,9 @@ const BOARD_COLLECTION_SCHEMA = Joi.object({
     updatedAt: Joi.date().timestamp("javascript").default(null),
     _destroy: Joi.boolean().default(false)
 })
+
+// chỉ định ra những trường mà không muốn cho phép cập nhật lại
+const INVALID_UPDATE_FIELDS = ['_id', 'createdAt']
 const validateBeforeCreate = async (data) => {
   return await BOARD_COLLECTION_SCHEMA.validateAsync(data, { abortEarly: false })
 }
@@ -81,7 +84,7 @@ const getDetail = async (id) => {
   }
 }
 
-export const pushColumnOrderIds = async (column) => {
+const pushColumnOrderIds = async (column) => {
   try {
     const result = await GET_DB()
       .collection(BOARD_COLLECTION_NAME)
@@ -98,16 +101,45 @@ export const pushColumnOrderIds = async (column) => {
           returnDocument: "after"
         }
       )
-      return result.value
+      return result
   } catch (e) {
     throw new Error(e)
   }
 }
+
+const update = async (id, updateData) => {
+  try {
+    // Lọc những field mà không cho phép cập nhật lung tung
+    Object.keys(updateData).forEach(fieldName => {
+      if (INVALID_UPDATE_FIELDS.includes(fieldName)) {
+        delete updateData[fieldName]
+      }
+    })
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(id)
+        },
+        {
+          $set: updateData
+        },
+        {
+          returnDocument: "after"
+        }
+      )
+      return result
+  } catch (e) {
+    throw new Error(e)
+  }
+}
+
 module.exports = {
   BOARD_COLLECTION_NAME,
   BOARD_COLLECTION_SCHEMA,
   createNew,
   findOneById,
   getDetail,
-  pushColumnOrderIds
+  pushColumnOrderIds,
+  update
 }

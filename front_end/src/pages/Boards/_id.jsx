@@ -9,6 +9,7 @@ import {
   fetchBoardDetailsAPI,
   createNewColumnAPI,
   createNewCardAPI,
+  updateBoardDetailsAPI
 } from "~/apis/index";
 import { generatePlaceholder } from "~/utils/formatters";
 const Board = () => {
@@ -63,6 +64,16 @@ const Board = () => {
     setBoard(newBoard)
   };
 
+  const moveColumns = async (dndOrderColumns) => {
+    const dndOrderColumnIds = dndOrderColumns.map((dndId) => dndId._id);
+    const newBoard = { ...board };
+    newBoard.columns = dndOrderColumns;
+    newBoard.columnOrderIds = dndOrderColumnIds;
+    setBoard(newBoard)
+    /// Call api để fetch dữ liệu
+    await updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderColumnIds});
+  };
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: "100vh" }}>
       <AppBoard />
@@ -71,6 +82,7 @@ const Board = () => {
         board={board}
         createNewColumn={createNewColumn}
         createNewCard={createNewCard}
+        moveColumns={moveColumns}
       />
     </Container>
   );

@@ -28,6 +28,7 @@ const BoardContent = (props) => {
   const board = props.board;
   const createNewColumn = props.createNewColumn;
   const createNewCard = props.createNewCard;
+  const moveColumns  = props.moveColumns;
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -305,6 +306,7 @@ const BoardContent = (props) => {
         oldColumnIndex,
         newColumnIndex
       );
+      moveColumns(dndOrderColumns)
       setOrderedColumns(dndOrderColumns);
     }
 

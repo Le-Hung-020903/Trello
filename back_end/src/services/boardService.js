@@ -33,5 +33,17 @@ module.exports = {
         } catch (e) {
             throw new Error(e.message)
         }
+    },
+    update: async (id, reqBody) => {
+        try {
+            const updateData = {
+                ...reqBody,
+                updatedAt: Date.now()
+            }
+            const updateBoard = await boardModel.update(id, updateData)
+            return updateBoard
+        } catch (e) {
+            throw new Error(e.message)
+        }
     }
 }
