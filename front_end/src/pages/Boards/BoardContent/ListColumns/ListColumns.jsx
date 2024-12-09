@@ -12,14 +12,20 @@ import TextField from "@mui/material/TextField";
 import ClearIcon from "@mui/icons-material/Clear";
 const ListColumns = (props) => {
   const listColumns = props.listColumns;
+  const createNewColumn = props.createNewColumn;
+  const createNewCard = props.createNewCard;
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
-  const addNewColumn = () => {
+  const addNewColumn = async () => {
     if(!newColumnTitle){
       toast.error("please enter column title")
       return 
     }
+    const newColumnData = {
+      title: newColumnTitle
+    }
+    await createNewColumn(newColumnData)
     toggleOpenNewColumnForm()
     setNewColumnTitle("")
   }
@@ -41,7 +47,11 @@ const ListColumns = (props) => {
         }}
       >
         {listColumns?.map((column) => (
-          <Column column={column} key={column?._id} />
+          <Column
+            column={column}
+            key={column?._id}
+            createNewCard={createNewCard}
+          />
         ))}
         {!openNewColumnForm ? (
           <Box

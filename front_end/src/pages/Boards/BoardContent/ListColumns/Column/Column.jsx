@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 
 const Column = (props) => {
   const column = props.column;
+  const createNewCard = props.createNewCard
   const [anchorEl, setAnchorEl] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState("");
   const [openNewCardForm, setOpenNewCardForm] = useState(false);
@@ -56,11 +57,16 @@ const Column = (props) => {
   const sortCard = sortColumn(column?.cards, column?.cardOrderIds, "_id");
   
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error("please enter Card title!", {position: "bottom-right"})
       return;
     }
+    const newCardData = {
+      title: newCardTitle,
+      columnId: column?._id,
+    }
+    await createNewCard(newCardData);
     toggleOpenNewCardForm();
     setNewCardTitle("");
   };

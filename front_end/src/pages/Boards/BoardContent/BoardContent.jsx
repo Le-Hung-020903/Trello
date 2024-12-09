@@ -25,7 +25,9 @@ const ACTIVE_DARG_ITEM_TYPE = {
   CARD: "ACTIVE_DARG_ITEM_TYPE_CARD",
 };
 const BoardContent = (props) => {
-  const board = props.board?.data;
+  const board = props.board;
+  const createNewColumn = props.createNewColumn;
+  const createNewCard = props.createNewCard;
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -110,8 +112,6 @@ const BoardContent = (props) => {
         // Cập nhật lại mảng cardOrderIds cho chuẩn dữ liệu
         nextOverColumn.cardOrderIds = nextOverColumn?.cards?.map((c) => c?._id);
       }
-      console.log("next column: ", nextColumns);
-
       return nextColumns;
     });
   };
@@ -338,7 +338,11 @@ const BoardContent = (props) => {
           p: "10px 0",
         }}
       >
-        <ListColumns listColumns={orderedColumns} />
+        <ListColumns
+          listColumns={orderedColumns}
+          createNewColumn={createNewColumn}
+          createNewCard={createNewCard}
+        />
         <DragOverlay
           dropAnimation={{
             duration: 500,
