@@ -15,7 +15,6 @@ import { TouchSensor, MouseSensor } from "../../../customLibraries/DndKitSensors
 import { arrayMove } from "@dnd-kit/sortable";
 import { cloneDeep, isEmpty } from "lodash";
 import ListColumns from "./ListColumns/ListColumns";
-import { sortColumn } from "~/utils/sortColumn";
 import Column from "./ListColumns/Column/Column";
 import CardItem from "./ListColumns/Column/ListCards/Card/Card";
 import { generatePlaceholder } from "~/utils/formatters";
@@ -29,6 +28,7 @@ const BoardContent = (props) => {
   const createNewColumn = props.createNewColumn;
   const createNewCard = props.createNewCard;
   const moveColumns  = props.moveColumns;
+  const moveCardInTheColumn = props.moveCardInTheColumn;
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -170,6 +170,7 @@ const BoardContent = (props) => {
     },
   });
   const sensors = useSensors(mouseSensor, touchSensor);
+  
   const handleDragStart = (e) => {
     const { active } = e;
     setActiveDragItemId(active?.id);
@@ -270,6 +271,8 @@ const BoardContent = (props) => {
           oldCardIndex,
           newCardIndex
         );
+        // Lấy ids của các card đã được kéo
+        const dndOrderCardIds = dndOrderCards.map(card => card._id)
         setOrderedColumns((preColumn) => {
           // clone mảng orderedColumn state cũ ra một cái mới để sử lý data rồi trả về
           // để cập nhật lại
@@ -281,10 +284,11 @@ const BoardContent = (props) => {
           );
 
           targetColumn.card = dndOrderCards;
-
-          targetColumn.cardOrderIds = dndOrderCards?.map((card) => card?._id);
+          targetColumn.cardOrderIds = dndOrderCardIds;
           return nextColumns;
         });
+        // Gọi API để thay đổi vị trí cards trong cùng một column
+        moveCardInTheColumn(dndOrderCards, dndOrderCardIds, oldColumnWhenDraggingCard._id)
       }
     }
 
@@ -306,8 +310,10 @@ const BoardContent = (props) => {
         oldColumnIndex,
         newColumnIndex
       );
-      moveColumns(dndOrderColumns)
+      // xét lại state vị trí của columns
       setOrderedColumns(dndOrderColumns);
+      // Gọi Api để lưu lại vị trí của các columns
+      moveColumns(dndOrderColumns)
     }
 
     setActiveDragItemId(null);
@@ -317,7 +323,7 @@ const BoardContent = (props) => {
   };
 
   useEffect(() => {
-    setOrderedColumns(sortColumn(board?.columns, board?.columnOrderIds, "_id"));
+    setOrderedColumns(board.columns);
   }, [board]);
   return (
     <DndContext

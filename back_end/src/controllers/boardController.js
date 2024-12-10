@@ -42,12 +42,12 @@ module.exports = {
     try {
       const { id } = req.params
       const updatedBoard = await boardService.update(id, req.body)
-       return successResponse(
+        return successResponse(
         res,
         StatusCodes.OK,
-        "Get board detail successfully",
+        "Update board detail successfully",
         updatedBoard
-       )
+      )
     } catch (e) {
       next(e)
     }

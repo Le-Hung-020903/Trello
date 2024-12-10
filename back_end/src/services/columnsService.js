@@ -18,5 +18,17 @@ module.exports = {
         } catch (e) {
             throw e
         }
+    },
+    update: async (columnId, reqBody) => {
+        try {
+            const updateData = {
+                ...reqBody,
+                updatedAt: Date.now()
+            }
+            const updateColumn = await columnModel.update(columnId, updateData)
+            return updateColumn
+        } catch (e) {
+            throw e
+        }
     }
 }

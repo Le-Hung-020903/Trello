@@ -17,7 +17,7 @@ const ListColumns = (props) => {
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
-  const addNewColumn = async () => {
+  const addNewColumn =  () => {
     if(!newColumnTitle){
       toast.error("please enter column title")
       return 
@@ -25,7 +25,7 @@ const ListColumns = (props) => {
     const newColumnData = {
       title: newColumnTitle
     }
-    await createNewColumn(newColumnData)
+    createNewColumn(newColumnData)
     toggleOpenNewColumnForm()
     setNewColumnTitle("")
   }

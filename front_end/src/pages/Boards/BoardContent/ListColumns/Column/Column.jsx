@@ -19,7 +19,6 @@ import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ListCards from "./ListCards/ListCards";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { sortColumn } from "~/utils/sortColumn";
 import TextField from "@mui/material/TextField";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
@@ -54,10 +53,10 @@ const Column = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const sortCard = sortColumn(column?.cards, column?.cardOrderIds, "_id");
+  const orderedCard = column?.cards;
   
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
-  const addNewCard = async () => {
+  const addNewCard =  () => {
     if (!newCardTitle) {
       toast.error("please enter Card title!", {position: "bottom-right"})
       return;
@@ -66,7 +65,7 @@ const Column = (props) => {
       title: newCardTitle,
       columnId: column?._id,
     }
-    await createNewCard(newCardData);
+    createNewCard(newCardData);
     toggleOpenNewCardForm();
     setNewCardTitle("");
   };
@@ -166,7 +165,7 @@ const Column = (props) => {
         </Box>
         {/* list column */}
 
-        <ListCards listCards={sortCard} />
+        <ListCards listCards={orderedCard} />
 
         {/* footer column */}
         <Box
