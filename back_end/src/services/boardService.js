@@ -2,6 +2,8 @@ const { StatusCodes } = require("http-status-codes")
 const { cloneDeep } = require("lodash")
 const { slugify } = require("../utils/formatter")
 const boardModel = require("../model/boardModel")
+const columnModel = require("../model/columnModel")
+const cardModel = require("../model/cardModel")
 const ApiError = require("~/utils/ApiError")
 module.exports = {
     createNew: async (reqBody) => {
@@ -26,7 +28,8 @@ module.exports = {
             }
             const responseBoard = cloneDeep(board)
             responseBoard.columns.forEach(column => {
-                column.cards = responseBoard.cards.filter(card => card?.columnId.toString() === column?._id.toString())
+                // column.cards = responseBoard.cards.filter(card => card?.columnId.toString() === column?._id.toString())
+                column.cards = responseBoard.cards.filter(card => card.columnId.equals(column._id))
             })
             delete responseBoard.cards
             return responseBoard
@@ -42,6 +45,30 @@ module.exports = {
             }
             const updateBoard = await boardModel.update(id, updateData)
             return updateBoard
+        } catch (e) {
+            throw new Error(e.message)
+        }
+    },
+    moveCardToDifferentColumn: async (reqBody) => {
+        try {
+            // b1: xoá _id card ra khỏi column.cardOrderIds chứa nó
+            await columnModel.update(reqBody.activeColumnId, {
+                cardOrderIds: reqBody.preCardOrderIds,
+                updatedAt: Date.now()
+            })
+            // b2: thêm _id card vào column mới.cardOrderIds chứa nó
+            await columnModel.update(reqBody.activeColumnId, {
+                cardOrderIds: reqBody.nextCardOrderIds,
+                updatedAt: Date.now()
+            })
+            // b3: cập nhật lại trường columnId của card mới được kéo
+            await cardModel.update(reqBody.currentCardId, {
+                columnId: reqBody.overColumnId
+                // updatedAt: Date.now()
+            })
+            return {
+                updateResult: "Move card successfully"
+            }
         } catch (e) {
             throw new Error(e.message)
         }

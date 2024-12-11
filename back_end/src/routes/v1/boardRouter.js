@@ -15,4 +15,11 @@ router
   .route("/:id")
   .get(boardController.getDetail)
   .put(boardValidation.update, boardController.update)
+
+router
+  .route("/supports/moving_card")
+  .put(
+    boardValidation.moveCardToDifferentColumn,
+    boardController.moveCardToDifferentColumn
+  )
 module.exports = router

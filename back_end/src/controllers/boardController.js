@@ -51,5 +51,19 @@ module.exports = {
     } catch (e) {
       next(e)
     }
+  },
+  moveCardToDifferentColumn: async (req, res, next) => {
+    try {
+      const result = await boardService.moveCardToDifferentColumn(req.body)
+      return successResponse(
+        res,
+        StatusCodes.OK,
+        "",
+        result
+      )
+    } catch (e) {
+      next(e)
+    }
   }
+
 }

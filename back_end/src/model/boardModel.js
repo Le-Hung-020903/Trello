@@ -115,6 +115,11 @@ const update = async (id, updateData) => {
         delete updateData[fieldName]
       }
     })
+    if (updateData.columnOrderIds) {
+          updateData.columnOrderIds = updateData.columnOrderIds.map(item => {
+            return new ObjectId(item)
+          })
+    }
     const result = await GET_DB()
       .collection(BOARD_COLLECTION_NAME)
       .findOneAndUpdate(

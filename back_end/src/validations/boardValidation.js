@@ -33,15 +33,48 @@ const update = async (req, res, next) => {
   })
   try {
     await correctCondition.validateAsync(req.body, { abortEarly: false, allowUnknown: true })
-    // next cho đi tiếp nếu dữ liệu hợp lệ
     next()
   } catch (e) {
     next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(e).message))
   }
 }
-
+const moveCardToDifferentColumn = async (req, res, next) => {
+  const correctCondition = Joi.object({
+    currentCardId: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+    activeColumnId: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+    preCardOrderIds: Joi.array()
+      .required()
+      .items(
+        Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+      ),
+    overColumnId: Joi.string()
+      .required()
+      .pattern(OBJECT_ID_RULE)
+      .message(OBJECT_ID_RULE_MESSAGE),
+    nextCardOrderIds: Joi.array()
+      .required()
+      .items(
+        Joi.string().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE)
+      )
+  })
+  try {
+    await correctCondition.validateAsync(req.body, {
+      abortEarly: false
+    })
+    next()
+  } catch (e) {
+    next(new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, new Error(e).message))
+  }
+}
 const boardValidation = {
-createNew,
-update
+  createNew,
+  update,
+  moveCardToDifferentColumn
 }
 module.exports = { boardValidation }

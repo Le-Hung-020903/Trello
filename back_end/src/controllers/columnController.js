@@ -18,12 +18,13 @@ module.exports = {
     update: async (req, res, next) => {
         try {
             const { id } = req.params
-            const updatedColumn = await columnService.update(id, req.Body)
+            const updatedColumn = await columnService.update(id, req.body)
             return successResponse(
                 res,
                 StatusCodes.OK,
                 "Update column successfully",
-                updatedColumn )
+                updatedColumn
+            )
         } catch (e) {
             next(e)
         }

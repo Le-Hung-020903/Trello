@@ -2,6 +2,7 @@ const Joi = require("joi")
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
 const { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } = require("../utils/validators")
+const INVALID_UPDATE_FIELDS = ["_id", "boardId", "createdAt"]
 const CARD_COLLECTION_NAME = "cards"
 const CARD_COLLECTION_SCHEMA = Joi.object({
     boardId: Joi.string().required().pattern(OBJECT_ID_RULE).message(OBJECT_ID_RULE_MESSAGE),
@@ -22,12 +23,12 @@ const createNewCard = async (data) => {
     try {
         const validData = await validateBeforeCreate(data)
         return await GET_DB()
-          .collection(CARD_COLLECTION_NAME)
-          .insertOne({
-            ...validData,
-            boardId: new ObjectId(validData.boardId),
-            columnId: new ObjectId(validData.columnId)
-          })
+            .collection(CARD_COLLECTION_NAME)
+            .insertOne({
+                ...validData,
+                boardId: new ObjectId(validData.boardId),
+                columnId: new ObjectId(validData.columnId)
+            })
     } catch (e) {
         throw new Error(e)
     }
@@ -42,11 +43,37 @@ const findOneById = async (id) => {
         throw new Error(e)
     }
 }
-
+const update = async (cardId, updateData) => {
+    try {
+        Object.keys(updateData).forEach(item => {
+            if (INVALID_UPDATE_FIELDS.includes(item)) {
+                delete updateData[item]
+            }
+        })
+        if (updateData.columnId) updateData.columnId = new ObjectId(updateData.columnId)
+        const result = await GET_DB()
+        .collection(CARD_COLLECTION_NAME)
+        .findOneAndUpdate(
+            {
+                _id: new ObjectId(cardId)
+            },
+            {
+                $set: updateData
+            },
+            {
+                returnDocument: "after"
+            }
+        )
+        return result
+    } catch (e) {
+        throw new Error(e)
+    }
+}
 
 module.exports = {
-  CARD_COLLECTION_NAME,
-  CARD_COLLECTION_SCHEMA,
-  createNewCard,
-  findOneById
+    CARD_COLLECTION_NAME,
+    CARD_COLLECTION_SCHEMA,
+    createNewCard,
+    findOneById,
+    update
 }
