@@ -1,5 +1,8 @@
 const columnModel = require("../model/columnModel")
 const boardModel = require("~/model/boardModel")
+const cardModel = require("~/model/cardModel")
+const ApiError = require("~/utils/ApiError")
+const { StatusCodes } = require("http-status-codes")
 module.exports = {
     createNewColumn: async (reqBody) => {
         try {
@@ -27,6 +30,23 @@ module.exports = {
             }
             const updateColumn = await columnModel.update(columnId, updateData)
             return updateColumn
+        } catch (e) {
+            throw e
+        }
+    },
+    deleteColumn: async (columnId) => {
+        try {
+            const targetColumn = await columnModel.findOneById(columnId)
+            if (!targetColumn) {
+                throw new ApiError(StatusCodes.NOT_FOUND, "Column not found")
+            }
+            // Xoá column
+            await columnModel.deleteOneById(columnId)
+            // Xoá cards
+            await cardModel.deleteManyByColumnId(columnId)
+            // Xoá columnId ở board
+            await boardModel.deleteOneColumnById(targetColumn)
+            return { deleteResult: "Column and its Cards deleted successfully" }
         } catch (e) {
             throw e
         }

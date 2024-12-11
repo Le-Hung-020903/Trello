@@ -28,5 +28,19 @@ module.exports = {
         } catch (e) {
             next(e)
         }
+    },
+    deleteColumn: async (req, res, next) => {
+        try {
+            const { id: columnId } = req.params
+            const result = await columnService.deleteColumn(columnId)
+            return successResponse(
+                res,
+                StatusCodes.OK,
+                "Delete column successfully",
+                result
+            )
+        } catch (e) {
+            next(e)
+        }
     }
 }

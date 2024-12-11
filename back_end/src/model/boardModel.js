@@ -138,6 +138,28 @@ const update = async (id, updateData) => {
     throw new Error(e)
   }
 }
+const deleteOneColumnById = async (column) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(column.boardId)
+        },
+        {
+          $pull: {
+            columnOrderIds: new ObjectId(column._id)
+          }
+        },
+        {
+          returnDocument: "after"
+        }
+      )
+    return result
+  } catch (e) {
+    throw new Error(e)
+  }
+}
 
 module.exports = {
   BOARD_COLLECTION_NAME,
@@ -146,5 +168,6 @@ module.exports = {
   findOneById,
   getDetail,
   pushColumnOrderIds,
-  update
+  update,
+  deleteOneColumnById
 }

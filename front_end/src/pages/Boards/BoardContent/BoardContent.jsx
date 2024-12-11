@@ -28,6 +28,7 @@ const BoardContent = (props) => {
   const moveColumns  = props.moveColumns;
   const moveCardInTheColumn = props.moveCardInTheColumn;
   const moveCardToDifferentColumn = props.moveCardToDifferentColumn;
+  const deleteColumnDetail = props.deleteColumnDetail;
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -286,7 +287,6 @@ const BoardContent = (props) => {
           oldCardIndex,
           newCardIndex
         );
-        console.log("dndOrderedCards: ", dndOrderedCards);
         
         // Lấy ids của các card đã được kéo
         const dndOrderCardIds = dndOrderedCards.map((card) => card._id);
@@ -371,6 +371,7 @@ const BoardContent = (props) => {
           listColumns={orderedColumns}
           createNewColumn={createNewColumn}
           createNewCard={createNewCard}
+          deleteColumnDetail={deleteColumnDetail}
         />
         <DragOverlay
           dropAnimation={{

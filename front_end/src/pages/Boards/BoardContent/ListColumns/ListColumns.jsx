@@ -14,6 +14,7 @@ const ListColumns = (props) => {
   const listColumns = props.listColumns;
   const createNewColumn = props.createNewColumn;
   const createNewCard = props.createNewCard;
+  const deleteColumnDetail = props.deleteColumnDetail;
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
@@ -51,6 +52,7 @@ const ListColumns = (props) => {
             column={column}
             key={column?._id}
             createNewCard={createNewCard}
+            deleteColumnDetail={deleteColumnDetail}
           />
         ))}
         {!openNewColumnForm ? (
