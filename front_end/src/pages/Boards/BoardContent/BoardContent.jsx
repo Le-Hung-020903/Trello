@@ -23,12 +23,9 @@ const ACTIVE_DARG_ITEM_TYPE = {
 };
 const BoardContent = (props) => {
   const board = props.board;
-  const createNewColumn = props.createNewColumn;
-  const createNewCard = props.createNewCard;
   const moveColumns  = props.moveColumns;
   const moveCardInTheColumn = props.moveCardInTheColumn;
   const moveCardToDifferentColumn = props.moveCardToDifferentColumn;
-  const deleteColumnDetail = props.deleteColumnDetail;
   const [orderedColumns, setOrderedColumns] = useState([]);
   const [activeDragItemId, setActiveDragItemId] = useState(null);
   const [activeDragItemType, setActiveDragItemType] = useState(null);
@@ -369,9 +366,6 @@ const BoardContent = (props) => {
       >
         <ListColumns
           listColumns={orderedColumns}
-          createNewColumn={createNewColumn}
-          createNewCard={createNewCard}
-          deleteColumnDetail={deleteColumnDetail}
         />
         <DragOverlay
           dropAnimation={{

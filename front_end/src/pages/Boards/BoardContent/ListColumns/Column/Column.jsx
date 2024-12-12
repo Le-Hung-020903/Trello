@@ -23,15 +23,19 @@ import TextField from "@mui/material/TextField";
 import ClearIcon from "@mui/icons-material/Clear";
 import { toast } from "react-toastify";
 import { useConfirm } from "material-ui-confirm";
+import { createNewCardAPI, deleteColumnDetailsAPI } from "~/apis";
+import { cloneDeep } from "lodash";
+import { useSelector, useDispatch } from "react-redux";
+import { selectCurrentActiveBoard, updateCurrentActiveBoard } from "~/redux/activeBoard/activeBoardSlice";
 
 const Column = (props) => {
   const column = props.column;
-  const deleteColumnDetail = props.deleteColumnDetail;
-  const createNewCard = props.createNewCard
   const [anchorEl, setAnchorEl] = useState(null);
   const [newCardTitle, setNewCardTitle] = useState("");
   const [openNewCardForm, setOpenNewCardForm] = useState(false);
   const confirmDeleteColumn = useConfirm();
+  const dispatch = useDispatch();
+  const board = useSelector(selectCurrentActiveBoard);
   const {
     attributes,
     listeners,
@@ -59,19 +63,47 @@ const Column = (props) => {
   const orderedCard = column?.cards;
   
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
-  const addNewCard =  () => {
+
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      toast.error("please enter Card title!", {position: "bottom-right"})
+      toast.error("please enter Card title!", { position: "bottom-right" });
       return;
     }
     const newCardData = {
       title: newCardTitle,
       columnId: column?._id,
+    };
+    // Gọi API tạo mới card và làm lại dữ liệu state board
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id,
+    });
+
+    // Cập nhật lại state board
+    // const newBoard = { ...board };
+    const newBoard = cloneDeep(board);
+
+    // Phải tìm ra được column chứa card để update
+    const columnToUpdate = newBoard.columns.find(
+      (column) => column._id === createdCard.columnId
+    );
+    if (columnToUpdate) {
+      // nếu column tp update đang rỗng bản chất là chứa một placeholders card
+      if (columnToUpdate.cards.some((c) => c.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard];
+        columnToUpdate.cardOrderIds = [createdCard._id];
+      } else {
+        // Ngược lại column đã có data thì push vào cuối mảng
+        columnToUpdate.cards.push(createdCard);
+        columnToUpdate.cardOrderIds.push(createdCard._id);
+      }
     }
-    createNewCard(newCardData);
+    dispatch(updateCurrentActiveBoard(newBoard));
+
     toggleOpenNewCardForm();
     setNewCardTitle("");
   };
+
   const handleDeleteColumn = () => {
     confirmDeleteColumn({
       title: "Delete Column?",
@@ -87,7 +119,20 @@ const Column = (props) => {
       // confirmationKeyword: "ledinhhung"
       buttonOrder: ["confirm", "cancel"]
     }).then(() => {
-        deleteColumnDetail(column._id);
+        const newBoard = { ...board };
+        newBoard.columns = newBoard.columns.filter(
+          (c) => c._id !== column?._id
+        );
+        newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+          (id) => id !== column?._id
+        );
+        dispatch(updateCurrentActiveBoard(newBoard));
+        // Call API đẩy lên BE
+        deleteColumnDetailsAPI(column?._id)
+          .then((res) => {
+            toast.success(`${res?.deleteResult}`);
+          })
+          .catch((e) => {});
     }).catch(() => {})
   };
   return (

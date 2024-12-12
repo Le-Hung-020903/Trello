@@ -10,25 +10,50 @@ import {
 } from "@dnd-kit/sortable";
 import TextField from "@mui/material/TextField";
 import ClearIcon from "@mui/icons-material/Clear";
+import { generatePlaceholder } from "~/utils/formatters";
+import { cloneDeep } from "lodash";
+import { selectCurrentActiveBoard, updateCurrentActiveBoard } from "~/redux/activeBoard/activeBoardSlice";
+import { createNewColumnAPI } from "~/apis";
+import { useSelector, useDispatch } from "react-redux";
 const ListColumns = (props) => {
   const listColumns = props.listColumns;
-  const createNewColumn = props.createNewColumn;
-  const createNewCard = props.createNewCard;
-  const deleteColumnDetail = props.deleteColumnDetail;
+  const dispatch = useDispatch();
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false);
   const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
-  const addNewColumn =  () => {
-    if(!newColumnTitle){
-      toast.error("please enter column title")
-      return 
+  const board = useSelector(selectCurrentActiveBoard);
+  
+
+  const addNewColumn = async  () => {
+    if (!newColumnTitle) {
+      toast.error("please enter column title");
+      return;
     }
     const newColumnData = {
-      title: newColumnTitle
-    }
-    createNewColumn(newColumnData)
-    toggleOpenNewColumnForm()
-    setNewColumnTitle("")
+      title: newColumnTitle,
+    };
+
+    // Gọi API tạo mới column và làm lại dữ liệu state board
+    const createdColumn = await createNewColumnAPI({
+      ...newColumnData,
+      boardId: board._id,
+    });
+    // khi tạo column thì chưa có card nên cần xử lý việc column bị rỗng và không kéo thả được
+    createdColumn.cards = [generatePlaceholder(createdColumn)];
+    createdColumn.cardOrderIds = [generatePlaceholder(createdColumn)._id];
+
+    // Cập nhật lại state board
+    // Đoạn này dính lỗi object is not extensible bởi dù đã copy/clone ra giá trị newBoard nhưng bản chất cảu spead operator laf shallow copy/clone
+    // nên dính ơphair rules Immutability trong redux Tookit không dùng được hàm push (sửa mảng giá trị trực tiếp), cách đơn giản nhanh gọn nhất là dùng tới
+    // Deep Copy/ clone toàn bộ Board cho dễ hiểu hơn
+    // const newBoard = {...board }
+    const newBoard = cloneDeep(board);
+    newBoard.columns?.push(createdColumn);
+    newBoard.columnOrderIds?.push(createdColumn._id);
+    dispatch(updateCurrentActiveBoard(newBoard));
+
+    toggleOpenNewColumnForm();
+    setNewColumnTitle("");
   }
   
   return (
@@ -51,8 +76,6 @@ const ListColumns = (props) => {
           <Column
             column={column}
             key={column?._id}
-            createNewCard={createNewCard}
-            deleteColumnDetail={deleteColumnDetail}
           />
         ))}
         {!openNewColumnForm ? (

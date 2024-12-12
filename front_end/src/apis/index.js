@@ -2,11 +2,11 @@ import axios from "axios"
 import { API_ROOT } from "~/utils/constants"
 
 // boards
-export const fetchBoardDetailsAPI = async (boardId) => {
-    const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`);
-    // axios sẽ trả về kết quả thông qua properties là data
-    return response.data.data;
-}
+// export const fetchBoardDetailsAPI = async (boardId) => {
+//     const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`);
+//     // axios sẽ trả về kết quả thông qua properties là data
+//     return response.data.data;
+// }
 
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await axios.put(

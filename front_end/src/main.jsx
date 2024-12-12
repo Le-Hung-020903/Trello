@@ -1,4 +1,3 @@
-import { StrictMode } from "react";
 import { ConfirmProvider } from "material-ui-confirm";
 import { createRoot } from "react-dom/client";
 import App from "~/App.jsx";
