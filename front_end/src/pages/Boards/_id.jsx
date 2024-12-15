@@ -14,14 +14,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { Typography } from "@mui/material";
 import { fetchBoardDetailsAPI, updateCurrentActiveBoard, selectCurrentActiveBoard} from "~/redux/activeBoard/activeBoardSlice"
 import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const Board = () => {
   const dispatch = useDispatch();
   const board = useSelector(selectCurrentActiveBoard);
-
+  const { boardId  } = useParams();
   useEffect(() => {
-    const id = "6750779b051afc3ab70c578e";
-    dispatch(fetchBoardDetailsAPI(id));
+    // const id = "6750779b051afc3ab70c578e";
+    dispatch(fetchBoardDetailsAPI(boardId));
   }, [dispatch]);
   
 

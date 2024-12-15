@@ -1,3 +1,4 @@
+import { pick } from "lodash"
 module.exports = {
     slugify: (value) => {
         if (!value) return ""
@@ -9,5 +10,9 @@ module.exports = {
             .replace(/[^a-z0-9 -]/g, "") // remove non-alphanumeric characters
             .replace(/\s+/g, "-") // replace spaces with hyphens
             .replace(/-+/g, "-") // remove consecutive hyphens
+    },
+    pickUser: (user) => {
+        if (!user) return {}
+        return pick(user, ['id', 'email', 'username', 'displayName', 'avatar', 'role', 'isActive', 'createdAt', 'updatedAt'])
     }
 }

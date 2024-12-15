@@ -73,10 +73,7 @@ const ListColumns = (props) => {
         }}
       >
         {listColumns?.map((column) => (
-          <Column
-            column={column}
-            key={column?._id}
-          />
+          <Column column={column} key={column?._id} />
         ))}
         {!openNewColumnForm ? (
           <Box
@@ -146,6 +143,7 @@ const ListColumns = (props) => {
             />
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Button
+                className="interceptor-loading"
                 variant="contained"
                 color="success"
                 size="small"

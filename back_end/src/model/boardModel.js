@@ -1,5 +1,5 @@
 const Joi = require("joi")
-const { ObjectId, ReturnDocument } = require("mongodb")
+const { ObjectId } = require("mongodb")
 const {
   OBJECT_ID_RULE,
   OBJECT_ID_RULE_MESSAGE

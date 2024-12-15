@@ -11,7 +11,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { store } from "./redux/store"
 import { Provider } from "react-redux";
 
+// Cấu hình react router dom với BrowserRouter
+import { BrowserRouter as Router } from "react-router-dom";
 createRoot(document.getElementById("root")).render(
+  <Router basename="/">
     <Provider store={store}>
       <ThemeProvider theme={theme}>
           <ConfirmProvider
@@ -28,4 +31,5 @@ createRoot(document.getElementById("root")).render(
           </ConfirmProvider>
       </ThemeProvider>
     </Provider>
+  </Router>
 );

@@ -4,6 +4,7 @@ const { StatusCodes } = require("http-status-codes")
 const boardRoute = require("./boardRouter")
 const columnRoute = require("./columnRoute")
 const cardRoute = require("./cardRoute")
+const userRoute = require("./userRouter")
 
 // check api v1
 router.get("/status", function (req, res) {
@@ -18,5 +19,9 @@ router.use("/columns", columnRoute)
 
 //cards apis
 router.use("/cards", cardRoute)
+
+// users apis
+router.use("/users", userRoute)
+
 
 module.exports = router
