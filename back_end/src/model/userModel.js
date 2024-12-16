@@ -1,7 +1,7 @@
 const Joi = require("joi")
 const { ObjectId } = require("mongodb")
 const { GET_DB } = require("~/config/mongodb")
-const { EMAIL_RULE, EMAIL_RULE_MESSAGE  } = require("../utils/validators")
+const { EMAIL_RULE, EMAIL_RULE_MESSAGE } = require("../utils/validators")
 const USER_ROLES = {
     CLIENT: "client",
     ADMIN: "admin"
@@ -37,6 +37,7 @@ const register = async (data) => {
         throw new Error(e)
     }
 }
+
 const findOneByEmail = async (email) => {
     try {
         const result = await GET_DB().collection(USER_COLLECTION_NAME).findOne({
@@ -58,10 +59,37 @@ const findOneById = async (id) => {
         throw new Error(e)
     }
 }
+
+const updateById = async (id, data) => {
+    try {
+        Object.keys(data).forEach((fieldName) => {
+            if (INVALID_UPDATE_FIELDS.includes(fieldName)) {
+                delete data[fieldName]
+            }
+        })
+        const result = await GET_DB()
+            .collection(USER_COLLECTION_NAME)
+            .findOneAndUpdate(
+            {
+                _id: new ObjectId(id)
+            },
+            {
+                $set: data
+            },
+            {
+                returnDocument: "after"
+            }
+            )
+        return result
+    } catch (e) {
+        throw new Error(e)
+    }
+}
 module.exports = {
     register,
     findOneByEmail,
     findOneById,
+    updateById,
     USER_COLLECTION_NAME,
     USER_COLLECTION_SCHEMA
 }

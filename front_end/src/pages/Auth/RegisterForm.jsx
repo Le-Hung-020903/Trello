@@ -8,7 +8,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import TextField from "@mui/material/TextField";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import FieldErrorAlert from "~/components/Form/FieldErrorAlert";
 import {
@@ -18,11 +18,20 @@ import {
   PASSWORD_RULE,
   PASSWORD_RULE_MESSAGE,
 } from "~/utils/validators";
+import { registerUserAPI } from "~/apis";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
   const {register, handleSubmit, formState: {errors }, watch} = useForm()
+  const navigate = useNavigate()
     const submitRegister = (data) => {
-      console.log(data);
+      const { email, password } = data
+      toast.promise(
+        registerUserAPI({ email, password }),
+        { pending: "Register is in progress..." }
+      ).then(user => {
+        navigate(`/login?registedEmail=${user.email}`)
+      });
     };
   return (
     <form onSubmit={handleSubmit(submitRegister)}>

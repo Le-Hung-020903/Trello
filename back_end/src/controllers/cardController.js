@@ -13,12 +13,6 @@ module.exports = {
         )
         } catch (e) {
             next(e)
-          // return errorsResponse(
-          // res
-          // StatusCodes.INTERNAL_SERVER_ERROR,
-          // "",
-          // e.message
-          // )
         }
     }
 }

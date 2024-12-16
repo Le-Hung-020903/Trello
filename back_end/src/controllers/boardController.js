@@ -1,6 +1,5 @@
 const { StatusCodes } = require("http-status-codes")
 const { successResponse } = require("~/utils/response")
-const ApiError = require("~/utils/ApiError")
 const boardService = require("~/services/boardService")
 module.exports = {
   createNew: async (req, res, next) => {
@@ -16,12 +15,6 @@ module.exports = {
       )
     } catch (e) {
       next(e)
-      // return errorsResponse(
-      // res
-      // StatusCodes.INTERNAL_SERVER_ERROR,
-      // "",
-      // e.message
-      // )
     }
   },
   getDetail: async (req, res, next) => {

@@ -9,8 +9,12 @@ import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
 import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { loginUserAPI, selectCurrentUser } from "~/redux/user/userSlice";
 import FieldErrorAlert from "~/components/Form/FieldErrorAlert";
 import {
   FIELD_REQUIRE_MESSAGE,
@@ -19,12 +23,31 @@ import {
   PASSWORD_RULE,
   PASSWORD_RULE_MESSAGE,
 } from "~/utils/validators";
-
 const LoginForm = () => {
   const {register, handleSubmit, formState: {errors }} = useForm()
+  
+  const user = useSelector(selectCurrentUser);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  let [searchParams] = useSearchParams()
+  const registeredEmail = searchParams.get("registedEmail");
+  const verifiedEmail = searchParams.get("verifiedEmail");
+
   const submitLogin = (data) => {
-    console.log(data);
+      const { email, password } = data
+      toast
+        .promise(
+          dispatch(loginUserAPI({ email, password })), {
+          pending: "Logging is in progress...",
+        })
+        .then((res) => {
+          console.log(res);
+          // Nếu như không có lỗi sẽ return về /
+          if(!res.error) navigate("/")
+        });
   };
+  console.log("user: ", user);
+  
   return (
     <form onSubmit={handleSubmit(submitLogin)}>
       <Zoom in={true} style={{ transitionDelay: "200ms" }}>
@@ -52,7 +75,7 @@ const LoginForm = () => {
           >
             Author: Le Dinh Hung
           </Box>
-          {/* <Box
+          <Box
             sx={{
               marginTop: "1em",
               display: "flex",
@@ -61,35 +84,40 @@ const LoginForm = () => {
               padding: "0 1em",
             }}
           >
-            <Alert
-              severity="success"
-              sx={{ ".MuiAlert-message": { overflow: "hidden" } }}
-            >
-              Your email&nbsp;
-              <Typography
-                variant="span"
-                sx={{ fontWeight: "bold", "&:hover": { color: "#fdba26" } }}
+            {verifiedEmail && (
+              <Alert
+                severity="success"
+                sx={{ ".MuiAlert-message": { overflow: "hidden" } }}
               >
-                lehung020903@gmail.com
-              </Typography>
-              &nbsp;has been verified.
-              <br /> Now you can login to enjoy our service! Have a good day!
-            </Alert>
-            <Alert
-              severity="info"
-              sx={{ ".MuiAlert-message": { overflow: "hidden" } }}
-            >
-              An email has been sent to&nbsp;
-              <Typography
-                variant="span"
-                sx={{ fontWeight: "bold", "&:hover": { color: "#fdba26" } }}
+                Your email&nbsp;
+                <Typography
+                  variant="span"
+                  sx={{ fontWeight: "bold", "&:hover": { color: "#fdba26" } }}
+                >
+                  {verifiedEmail}
+                </Typography>
+                &nbsp;has been verified.
+                <br /> Now you can login to enjoy our service! Have a good day!
+              </Alert>
+            )}
+
+            {registeredEmail && (
+              <Alert
+                severity="info"
+                sx={{ ".MuiAlert-message": { overflow: "hidden" } }}
               >
-                lehung020903@gmail.com
-              </Typography>
-              <br />
-              Please check and verrify your account before logging in!
-            </Alert>
-          </Box> */}
+                An email has been sent to&nbsp;
+                <Typography
+                  variant="span"
+                  sx={{ fontWeight: "bold", "&:hover": { color: "#fdba26" } }}
+                >
+                  {registeredEmail}
+                </Typography>
+                <br />
+                Please check and verrify your account before logging in!
+              </Alert>
+            )}
+          </Box>
           <Box sx={{ padding: "0 1em 1em 1em" }}>
             <Box sx={{ marginTop: "1em" }}>
               <TextField
