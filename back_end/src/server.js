@@ -10,7 +10,11 @@ const { corsOptions } = require("./config/cors")
 const { errorHandlingMiddleware } = require('../src/middlewares/errorHandlingMiddleware')
 const indexRouters = require("../src/routes/v1/index")
 
-
+//fix vụ cache from disk của expressJS
+app.use((req, res, next) => {
+  res.set("Cache-Control", 'no-store')
+  next()
+})
 app.use(logger("dev"))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

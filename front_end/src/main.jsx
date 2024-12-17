@@ -13,10 +13,16 @@ import { Provider } from "react-redux";
 
 // Cấu hình react router dom với BrowserRouter
 import { BrowserRouter as Router } from "react-router-dom";
+
+// Cấu hình Redux- Persist
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+const persistor = persistStore(store);
 createRoot(document.getElementById("root")).render(
   <Router basename="/">
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
+      <PersistGate persistor={persistor}>
+        <ThemeProvider theme={theme}>
           <ConfirmProvider
             defaultOptions={{
               dialogProps: { maxWidth: "xs" },
@@ -30,6 +36,7 @@ createRoot(document.getElementById("root")).render(
             <ToastContainer position="bottom-left" theme="colored" />
           </ConfirmProvider>
       </ThemeProvider>
+      </PersistGate>
     </Provider>
   </Router>
 );

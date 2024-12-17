@@ -46,7 +46,6 @@ const LoginForm = () => {
           if(!res.error) navigate("/")
         });
   };
-  console.log("user: ", user);
   
   return (
     <form onSubmit={handleSubmit(submitLogin)}>

@@ -7,6 +7,7 @@ const {
 const columnModel = require("./columnModel")
 const cardModel = require("./cardModel")
 const { GET_DB } = require("../config/mongodb")
+
 const BOARD_COLLECTION_NAME = "boards"
 const BOARD_COLLECTION_SCHEMA = Joi.object({
     slug: Joi.string().required().min(3).trim().strict(),
