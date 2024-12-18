@@ -2,6 +2,7 @@ import { ConfirmProvider } from "material-ui-confirm";
 import { createRoot } from "react-dom/client";
 import App from "~/App.jsx";
 import CssBaseline from "@mui/material/CssBaseline";
+import GlobalStyles from "@mui/material/GlobalStyles";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "~/theme.js";
 
@@ -18,6 +19,11 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 const persistor = persistStore(store);
+
+// Kỹ thuật Inject store
+import { injectStore } from "./utils/authorizeAxios"
+injectStore(store);
+
 createRoot(document.getElementById("root")).render(
   <Router basename="/">
     <Provider store={store}>
@@ -31,6 +37,7 @@ createRoot(document.getElementById("root")).render(
               allowClose: false,
             }}
           >
+            <GlobalStyles styles={{ a: { textDecoration: "none" }}}/>
             <CssBaseline />
             <App />
             <ToastContainer position="bottom-left" theme="colored" />

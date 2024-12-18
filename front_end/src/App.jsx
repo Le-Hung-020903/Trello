@@ -6,6 +6,7 @@ import NotFound from "./pages/404/NotFound";
 import Auth from "./pages/Auth/Auth";
 import AccountVerification from "./pages/Auth/AccountVerification";
 import { selectCurrentUser } from "./redux/user/userSlice";
+import Settings from "./pages/Settings/Settings";
 
 // Giải pháp clean code trong việc xác định các router nào cần đăng nhập 
 // sử dụng Outlet của react-router-dom để hiển thị các Child Route
@@ -29,12 +30,16 @@ const App = () => {
         element={<Navigate to="/boards/6750779b051afc3ab70c578e" />}
         replace={true}
       />
-      <Route element={<ProtectedRoute user={currentUser}/>}>
+      <Route element={<ProtectedRoute user={currentUser} />}>
         {/* Outlet sẽ chạy vào các child route trong này */}
+
         {/* board detail */}
         <Route path="/boards/:boardId" element={<Board />} />
+
+        {/* User settings */}
+        <Route path="/settings/account" element={<Settings />} />
+        <Route path="/settings/security" element={<Settings />} />
       </Route>
-      
 
       {/* Authentication */}
       <Route path="/login" element={<Auth />} />

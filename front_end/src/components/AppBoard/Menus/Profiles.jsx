@@ -6,21 +6,36 @@ import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
+import { Link } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux";
+import { selectCurrentUser, logoutUserAPI } from "~/redux/user/userSlice";
+import { useConfirm } from "material-ui-confirm";
 
 export default function Profiles() {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
+  const confirmLogout = useConfirm();
+  const currentUser = useSelector(selectCurrentUser);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleLogout = () => {
+    confirmLogout({
+      title: "Are you sure want to log out?",
+      confirmationText: "Cofirm",
+      cancellationText: "Cancel",
+    }).then(() => {
+      dispatch(logoutUserAPI())
+    }).catch(() => {})
+  }
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -33,7 +48,10 @@ export default function Profiles() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32, color: "white" }}>M</Avatar>
+            <Avatar
+              sx={{ width: 32, height: 32, color: "white" }}
+              src={currentUser?.avatar}
+            ></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -74,28 +92,46 @@ export default function Profiles() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <Link to="/settings/account">
+          <MenuItem
+            sx={{
+              "&:hover": {
+                color: "success.light",
+              },
+            }}
+          >
+            <Avatar src={currentUser?.avatar} /> Profile
+          </MenuItem>
+        </Link>
+        {/* <MenuItem onClick={handleClose}>
           <Avatar /> My account
-        </MenuItem>
+        </MenuItem> */}
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem>
           <ListItemIcon>
             <PersonAdd fontSize="small" />
           </ListItemIcon>
           Add another account
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          onClick={handleLogout}
+          sx={{
+            "&:hover": {
+              color: "warning.dark",
+              "& .logout-icon": {
+                color: "warning.dark",
+              },
+            },
+          }}
+        >
           <ListItemIcon>
-            <Logout fontSize="small" />
+            <Logout className="logout-icon" fontSize="small" />
           </ListItemIcon>
           Logout
         </MenuItem>

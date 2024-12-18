@@ -18,6 +18,7 @@ import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import { Link } from "react-router-dom";
 const AppBoard = () => {
   const [search, setSearch] = useState("");
   return (
@@ -37,12 +38,14 @@ const AppBoard = () => {
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
         <AppsIcon sx={{ color: "white" }} />
-        <Typography
-          variant="span"
-          sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "white" }}
-        >
-          Trello
-        </Typography>
+        <Link to="/">
+            <Typography
+              variant="span"
+              sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "white" }}
+            >
+              Trello
+            </Typography>
+        </Link>
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
           <Workspaces />
           <Recent />
