@@ -1,15 +1,12 @@
 var express = require("express")
 var router = express.Router()
-const { StatusCodes } = require("http-status-codes")
 const { boardValidation } = require("../../validations/boardValidation")
 const boardController = require("../../controllers/boardController")
 const { authMiddleware } = require("../../middlewares/authMiddlewares")
 
 router
   .route("/")
-  .get(authMiddleware.isAuthorized, (req, res) => {
-    res.status(StatusCodes.OK).json({ message: "APi get list board" })
-  })
+  .get(authMiddleware.isAuthorized, boardController.getBoards)
   .post(
     authMiddleware.isAuthorized,
     boardValidation.createNew,

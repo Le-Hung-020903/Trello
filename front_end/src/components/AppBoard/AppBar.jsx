@@ -1,26 +1,26 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import ModeSelect from "~/components/ModeSelect/ModeSelect";
-import AppsIcon from "@mui/icons-material/Apps";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import Workspaces from "./Menus/Workspaces";
-import Recent from "./Menus/Recent";
-import Starred from "./Menus/Starred";
-import Templates from "./Menus/templates";
-import TextField from "@mui/material/TextField";
-import Badge from "@mui/material/Badge";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
-import Tooltip from "@mui/material/Tooltip";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
-import Profiles from "./Menus/Profiles";
-import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
-import InputAdornment from "@mui/material/InputAdornment";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
-import { Link } from "react-router-dom";
+import React, { useState } from "react"
+import Box from "@mui/material/Box"
+import ModeSelect from "~/components/ModeSelect/ModeSelect"
+import AppsIcon from "@mui/icons-material/Apps"
+import Typography from "@mui/material/Typography"
+import Button from "@mui/material/Button"
+import Workspaces from "./Menus/Workspaces"
+import Recent from "./Menus/Recent"
+import Starred from "./Menus/Starred"
+import Templates from "./Menus/templates"
+import TextField from "@mui/material/TextField"
+import Badge from "@mui/material/Badge"
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone"
+import Tooltip from "@mui/material/Tooltip"
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline"
+import Profiles from "./Menus/Profiles"
+import LibraryAddIcon from "@mui/icons-material/LibraryAdd"
+import InputAdornment from "@mui/material/InputAdornment"
+import SearchIcon from "@mui/icons-material/Search"
+import ClearIcon from "@mui/icons-material/Clear"
+import { Link } from "react-router-dom"
 const AppBoard = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("")
   return (
     <Box
       px={2}
@@ -33,18 +33,22 @@ const AppBoard = () => {
         gap: 2,
         overflowX: "auto",
         bgcolor: (theme) =>
-          theme.palette.mode === "dark" ? "#2c3e50" : "#1565c0",
+          theme.palette.mode === "dark" ? "#2c3e50" : "#1565c0"
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <AppsIcon sx={{ color: "white" }} />
+        <Link to="/boards">
+          <Tooltip title="Board list">
+            <AppsIcon sx={{ color: "white", verticalAlign: "middle" }} />
+          </Tooltip>
+        </Link>
         <Link to="/">
-            <Typography
-              variant="span"
-              sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "white" }}
-            >
-              Trello
-            </Typography>
+          <Typography
+            variant="span"
+            sx={{ fontSize: "1.2rem", fontWeight: "bold", color: "white" }}
+          >
+            Trello
+          </Typography>
         </Link>
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
           <Workspaces />
@@ -58,8 +62,8 @@ const AppBoard = () => {
               color: "white",
               border: "none",
               "&:hover": {
-                border: "none",
-              },
+                border: "none"
+              }
             }}
           >
             Create
@@ -89,8 +93,8 @@ const AppBoard = () => {
                     onClick={() => setSearch("")}
                   />
                 </InputAdornment>
-              ),
-            },
+              )
+            }
           }}
           sx={{
             minWidth: "120px",
@@ -99,15 +103,15 @@ const AppBoard = () => {
             "& label.Mui-focused": { color: "white" },
             "& .MuiOutlinedInput-root": {
               "& fieldset": {
-                borderColor: "white",
+                borderColor: "white"
               },
               "&:hover fieldset": {
-                borderColor: "white",
+                borderColor: "white"
               },
               "&.Mui-focused fieldset": {
-                borderColor: "white",
-              },
-            },
+                borderColor: "white"
+              }
+            }
           }}
         />
         <ModeSelect />
@@ -122,7 +126,7 @@ const AppBoard = () => {
         <Profiles />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AppBoard;
+export default AppBoard
