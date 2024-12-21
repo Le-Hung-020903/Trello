@@ -9,13 +9,13 @@ const ToggleFocusInput = ({
 }) => {
   const [inputValue, setInputValue] = useState(value)
   const triggleBlur = () => {
-    if (!inputValue) {
+    setInputValue(inputValue.trim())
+
+    // Nếu giá trị không thay đổi thì return luôn
+    if (!inputValue || inputValue.trim() === value) {
       setInputValue(value)
       return
     }
-
-    // Nếu giá trị không thay đổi thì return luôn
-    if (inputValue === value) return
     // console.log("value: ", value)
     // console.log("inputvalue: ", inputValue)
 

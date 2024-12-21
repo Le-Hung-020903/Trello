@@ -5,6 +5,7 @@ const boardRoute = require("./boardRouter")
 const columnRoute = require("./columnRoute")
 const cardRoute = require("./cardRoute")
 const userRoute = require("./userRouter")
+const innvitationRouter = require("./innvitationRouter")
 
 // check api v1
 router.get("/status", function (req, res) {
@@ -23,5 +24,7 @@ router.use("/cards", cardRoute)
 // users apis
 router.use("/users", userRoute)
 
+// invitation apis
+router.use("/invitations", innvitationRouter)
 
 module.exports = router

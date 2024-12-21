@@ -1,5 +1,4 @@
 import React from "react"
-import { styled } from "@mui/material/styles"
 import Button from "@mui/material/Button"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
 import { useSelector, useDispatch } from "react-redux"
@@ -17,18 +16,7 @@ import { FIELD_REQUIRE_MESSAGE, singleFileValidator } from "~/utils/validators"
 import FieldErrorAlert from "~/components/Form/FieldErrorAlert"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1
-})
+import VisuallyHiddenInput from "~/components/Form/VisuallyHiddenInput"
 
 const AccountTab = () => {
   const currentUser = useSelector(selectCurrentUser)

@@ -3,6 +3,7 @@ const { ObjectId } = require("mongodb")
 const { OBJECT_ID_RULE, OBJECT_ID_RULE_MESSAGE } = require("~/utils/validators")
 const columnModel = require("./columnModel")
 const cardModel = require("./cardModel")
+const userModel = require("./userModel")
 const { GET_DB } = require("../config/mongodb")
 const { pagingSkipValue } = require("../utils/algorithms")
 const BOARD_COLLECTION_NAME = "boards"
@@ -61,7 +62,6 @@ const findOneById = async (id) => {
     throw new Error(e)
   }
 }
-
 // query tổng hợp để lấy toàn bộ columns và cards thuộc về Board
 const getDetail = async (userId, boardId) => {
   try {
@@ -99,6 +99,40 @@ const getDetail = async (userId, boardId) => {
             localField: "_id",
             foreignField: "boardId",
             as: "cards"
+          }
+        },
+        {
+          $lookup: {
+            from: userModel.USER_COLLECTION_NAME,
+            localField: "ownerIds",
+            foreignField: "_id",
+            as: "owners",
+            // pipeline trong lookup là để xử lý một hoặc nhiều luồng cần thiết
+            // $project để chỉ định vài field không muốn lấy về bằng cách gán = 0
+            pipeline: [
+              {
+                $project: {
+                  password: 0,
+                  verifyToken: 0
+                }
+              }
+            ]
+          }
+        },
+        {
+          $lookup: {
+            from: userModel.USER_COLLECTION_NAME,
+            localField: "memberIds",
+            foreignField: "_id",
+            as: "members",
+            pipeline: [
+              {
+                $project: {
+                  password: 0,
+                  verifyToken: 0
+                }
+              }
+            ]
           }
         }
       ])

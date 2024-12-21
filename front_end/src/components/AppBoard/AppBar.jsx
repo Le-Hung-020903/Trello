@@ -9,8 +9,6 @@ import Recent from "./Menus/Recent"
 import Starred from "./Menus/Starred"
 import Templates from "./Menus/templates"
 import TextField from "@mui/material/TextField"
-import Badge from "@mui/material/Badge"
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone"
 import Tooltip from "@mui/material/Tooltip"
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline"
 import Profiles from "./Menus/Profiles"
@@ -19,6 +17,7 @@ import InputAdornment from "@mui/material/InputAdornment"
 import SearchIcon from "@mui/icons-material/Search"
 import ClearIcon from "@mui/icons-material/Clear"
 import { Link } from "react-router-dom"
+import Notifications from "./Notifications/Notifications"
 const AppBoard = () => {
   const [search, setSearch] = useState("")
   return (
@@ -115,11 +114,8 @@ const AppBoard = () => {
           }}
         />
         <ModeSelect />
-        <Tooltip title="Notification">
-          <Badge color="warning" variant="dot" sx={{ cursor: "pointer" }}>
-            <NotificationsNoneIcon />
-          </Badge>
-        </Tooltip>
+        {/* Xử lý hiển thị thông báo */}
+        <Notifications />
         <Tooltip title="Help" sx={{ cursor: "pointer" }}>
           <HelpOutlineIcon />
         </Tooltip>

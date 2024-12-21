@@ -22,6 +22,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight"
 import SidebarCreateBoardModal from "./create"
 import { fetchBoardsAPI } from "../../apis/index"
 import { DEFAULT_ITEMS_PAGE, DEFAULT_PAGE } from "../../utils/constants"
+import BoardBar from "./BoardBar/BoardBar"
 
 const SiderbarItem = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -62,6 +63,7 @@ const Boards = () => {
   return (
     <Container disableGutters maxWidth={false}>
       <AppBoard />
+      <BoardBar />
       <Box
         sx={{
           paddingX: 2,

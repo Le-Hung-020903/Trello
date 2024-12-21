@@ -1,16 +1,14 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
-import Dashboard from "@mui/icons-material/Dashboard";
-import VpnLockIcon from "@mui/icons-material/VpnLock";
-import AddToDriveIcon from "@mui/icons-material/AddToDrive";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import AvatarGroup from "@mui/material/AvatarGroup";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { capitalize } from "~/utils/formatters";
-import { Tooltip } from "@mui/material";
+import React from "react"
+import Box from "@mui/material/Box"
+import Chip from "@mui/material/Chip"
+import Dashboard from "@mui/icons-material/Dashboard"
+import VpnLockIcon from "@mui/icons-material/VpnLock"
+import AddToDriveIcon from "@mui/icons-material/AddToDrive"
+import FilterListIcon from "@mui/icons-material/FilterList"
+import { capitalize } from "~/utils/formatters"
+import { Tooltip } from "@mui/material"
+import BoardUserGroup from "./BoardUserGroup"
+import InviteBoardUser from "./InviteBoardUser"
 const menu_styles = {
   color: "white",
   bgcolor: "transparent",
@@ -18,15 +16,13 @@ const menu_styles = {
   paddingX: "5px",
   borderRadius: `4px`,
   ".MuiSvgIcon-root": {
-    color: "white",
+    color: "white"
   },
   "&:hover": {
-    bgcolor: "primary.50",
-  },
-};
-const BoardBar = (props) => {
-  const data = props.board?.data;
-  
+    bgcolor: "primary.50"
+  }
+}
+const BoardBar = ({ board }) => {
   return (
     <Box
       sx={{
@@ -39,22 +35,22 @@ const BoardBar = (props) => {
         paddingX: 2,
         overflowX: "auto",
         bgcolor: (theme) =>
-          theme.palette.mode === "dark" ? "#34495e" : "#1976D2",
+          theme.palette.mode === "dark" ? "#34495e" : "#1976D2"
       }}
     >
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Tooltip title={data?.description}>
+        <Tooltip title={board?.description}>
           <Chip
             sx={menu_styles}
             icon={<Dashboard />}
-            label={data?.title}
+            label={board?.title}
             clickable
           ></Chip>
         </Tooltip>
         <Chip
           sx={menu_styles}
           icon={<VpnLockIcon />}
-          label={capitalize(data?.type)}
+          label={capitalize(board?.type)}
           clickable
         ></Chip>
         <Chip
@@ -71,42 +67,11 @@ const BoardBar = (props) => {
         ></Chip>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-        <Button
-          variant="outlined"
-          startIcon={<PersonAddIcon />}
-          sx={{
-            color: "white",
-            borderColor: "white",
-            "&:hover": {
-              borderColor: "white",
-            },
-          }}
-        >
-          Invite
-        </Button>
-        <Box>
-          <AvatarGroup
-            max={4}
-            sx={{
-              gap: "10px",
-              "& .MuiAvatar-root": {
-                width: 34,
-                height: 34,
-                fontSize: 16,
-                border: "none",
-                cursor: "pointer",
-              },
-            }}
-          >
-            <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-            <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-            <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-            <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
-          </AvatarGroup>
-        </Box>
+        <InviteBoardUser boardId={board?._id} />
+        <BoardUserGroup boardUsers={board?.FE_allUsers} />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default BoardBar;
+export default BoardBar
