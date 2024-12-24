@@ -14,7 +14,7 @@ module.exports = {
   pickUser: (user) => {
     if (!user) return {}
     return pick(user, [
-      "id",
+      "_id",
       "email",
       "username",
       "displayName",

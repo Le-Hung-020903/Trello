@@ -25,7 +25,14 @@ const createNew = async (req, res, next) => {
 const update = async (req, res, next) => {
   const correctCondition = Joi.object({
     title: Joi.string().min(3).max(50).trim().strict(),
-    description: Joi.string().optional()
+    description: Joi.string().optional(),
+    incomingMemberInfo: Joi.object({
+      userId: Joi.string()
+        .required()
+        .pattern(OBJECT_ID_RULE)
+        .message(OBJECT_ID_RULE_MESSAGE),
+      action: Joi.string().valid("ADD", "REMOVE").required()
+    }).optional() // `optional` nếu trường này không bắt buộc
   })
   try {
     await correctCondition.validateAsync(req.body, { abortEarly: false })

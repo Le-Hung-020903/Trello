@@ -7,6 +7,7 @@ const {
   EMAIL_RULE_MESSAGE,
   OBJECT_ID_RULE_MESSAGE
 } = require("../utils/validators")
+import { CARD_MEMBER_ACTIONS } from "~/utils/constants"
 const INVALID_UPDATE_FIELDS = ["_id", "boardId", "createdAt"]
 const CARD_COLLECTION_NAME = "cards"
 const CARD_COLLECTION_SCHEMA = Joi.object({
@@ -125,12 +126,40 @@ const unShiftNewComment = async (cardId, commentData) => {
     throw new Error(e)
   }
 }
+
+const updateMembers = async (cardId, incomingMemberInfo) => {
+  try {
+    let updateCondition = {}
+    if (incomingMemberInfo.action === CARD_MEMBER_ACTIONS.ADD) {
+      // Thêm vào db thì dùng $push
+      updateCondition = {
+        $push: { memberIds: new ObjectId(incomingMemberInfo.userId) }
+      }
+    }
+    if (incomingMemberInfo.action === CARD_MEMBER_ACTIONS.REMOVE) {
+      // Xóa khỏi db thì dùng $pull (xoá ra khỏi mảmng ngược lại với push)
+      updateCondition = {
+        $pull: { memberIds: new ObjectId(incomingMemberInfo.userId) }
+      }
+    }
+    const result = await GET_DB()
+      .collection(CARD_COLLECTION_NAME)
+      .findOneAndUpdate({ _id: new ObjectId(cardId) }, updateCondition, {
+        returnDocument: "after"
+      })
+    return result
+  } catch (e) {
+    throw new Error(e)
+  }
+}
+
 module.exports = {
   CARD_COLLECTION_NAME,
   CARD_COLLECTION_SCHEMA,
   createNewCard,
   findOneById,
   update,
+  updateMembers,
   deleteManyByColumnId,
   unShiftNewComment
 }

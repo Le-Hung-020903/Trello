@@ -104,13 +104,8 @@ const update = async (invitationId, updateData) => {
         boardId: new ObjectId(updateData.boardInvitation.boardId)
       }
     }
-    if (updateData.cardOrderIds) {
-      updateData.cardOrderIds = updateData.cardOrderIds.map((item) => {
-        return new ObjectId(item)
-      })
-    }
     const result = await GET_DB()
-      .collection(COLUMN_COLLECTION_NAME)
+      .collection(INVITATION_COLLECTION_NAME)
       .findOneAndUpdate(
         {
           _id: new ObjectId(invitationId)
@@ -132,7 +127,7 @@ const update = async (invitationId, updateData) => {
 const findByUser = async (userId) => {
   try {
     const queryConditions = [
-      { inviterId: new ObjectId(userId) },
+      { inviteeId: new ObjectId(userId) },
       { _destroy: false }
     ] // tìm theo inviteeId - người được mời (chính là người đang thực hiện request này)
 
@@ -147,7 +142,7 @@ const findByUser = async (userId) => {
         {
           $lookup: {
             from: userModel.USER_COLLECTION_NAME,
-            localField: "inviterId", // Người đi mời
+            localField: "inviteeId", // Người đi mời
             foreignField: "_id",
             as: "inviter",
             // pipeline trong lookup là để xử lý một hoặc nhiều luồng cần thiết
@@ -183,15 +178,7 @@ const findByUser = async (userId) => {
             from: boardModel.BOARD_COLLECTION_NAME,
             localField: "boardInvitation.boardId", // Lấy ra thông tin của board
             foreignField: "_id",
-            as: "board",
-            pipeline: [
-              {
-                $project: {
-                  password: 0,
-                  verifyToken: 0
-                }
-              }
-            ]
+            as: "board"
           }
         }
       ])

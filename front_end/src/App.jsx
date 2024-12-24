@@ -1,5 +1,5 @@
 import React from "react"
-import { Routes, Route, Navigate, Outlet } from "react-router-dom"
+import { Routes, Route, Navigate, Outlet } from "react-router"
 import { useSelector } from "react-redux"
 import Board from "~/pages/Boards/_id"
 import NotFound from "./pages/404/NotFound"
@@ -10,7 +10,7 @@ import Settings from "./pages/Settings/Settings"
 import Boards from "./pages/Boards"
 
 // Giải pháp clean code trong việc xác định các router nào cần đăng nhập
-// sử dụng Outlet của react-router-dom để hiển thị các Child Route
+// sử dụng Outlet của react-router để hiển thị các Child Route
 const ProtectedRoute = ({ user }) => {
   if (!user) return <Navigate to="/login" replace={true} />
   return <Outlet />

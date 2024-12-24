@@ -75,7 +75,7 @@ export const activeBoardSlice = createSlice({
           column.cards = [generatePlaceholder(column)]
           column.cardOrderIds = [generatePlaceholder(column)._id]
         } else {
-          // Sắp xếp thứ tự cards rồi mới đưa xuosong các components con
+          // Sắp xếp thứ tự cards rồi mới đưa xuống các components con
           column.cards = sortColumn(column.cards, column.cardOrderIds, "_id")
         }
       })

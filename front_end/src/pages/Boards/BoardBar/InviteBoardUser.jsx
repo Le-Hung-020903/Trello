@@ -14,6 +14,7 @@ import {
 } from "~/utils/validators"
 import FieldErrorAlert from "~/components/Form/FieldErrorAlert"
 import { inviteUserToBoardAPI } from "~/apis"
+import { soketIoInstance } from "~/socketClient"
 
 function InviteBoardUser({ boardId }) {
   /**
@@ -36,16 +37,15 @@ function InviteBoardUser({ boardId }) {
   } = useForm()
   const submitInviteUserToBoard = (data) => {
     const { inviteeEmail } = data
-    console.log("boardId: ", boardId)
-    console.log("inviteeEmail: ", inviteeEmail)
-
     // Gọi API mời thành viên của board
-    inviteUserToBoardAPI({ inviteeEmail, boardId }).then(() => {
+    inviteUserToBoardAPI({ inviteeEmail, boardId }).then((invitation) => {
       // Clear thẻ input sử dụng react-hook-form bằng setValue
       setValue("inviteeEmail", null)
       setAnchorPopoverElement(null)
 
-      // Mời 1 người dùng vào board xong thì gửi emit sự kiện socket
+      // Mời 1 người dùng vào board xong thì gửi emit sự kiện socket lên server
+      soketIoInstance.emit("FE_USER_INVITED_TO_BOARD", invitation)
+      console.log("Goij tu fe notification")
     })
   }
 

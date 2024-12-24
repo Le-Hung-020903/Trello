@@ -1,4 +1,3 @@
-
 var createError = require("http-errors")
 var express = require("express")
 var path = require("path")
@@ -7,12 +6,14 @@ var logger = require("morgan")
 const cors = require("cors")
 var app = express()
 const { corsOptions } = require("./config/cors")
-const { errorHandlingMiddleware } = require('../src/middlewares/errorHandlingMiddleware')
+const {
+  errorHandlingMiddleware
+} = require("../src/middlewares/errorHandlingMiddleware")
 const indexRouters = require("../src/routes/v1/index")
 
 //fix vụ cache from disk của expressJS
 app.use((req, res, next) => {
-  res.set("Cache-Control", 'no-store')
+  res.set("Cache-Control", "no-store")
   next()
 })
 app.use(logger("dev"))
@@ -24,7 +25,6 @@ app.use(express.static(path.join(__dirname, "public")))
 app.use(cors(corsOptions))
 // routes web
 app.use("/v1", indexRouters)
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

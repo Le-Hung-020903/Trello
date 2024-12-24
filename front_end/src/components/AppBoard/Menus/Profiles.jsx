@@ -1,40 +1,42 @@
-import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
-import { Link } from "react-router-dom"
-import { useSelector, useDispatch } from "react-redux";
-import { selectCurrentUser, logoutUserAPI } from "~/redux/user/userSlice";
-import { useConfirm } from "material-ui-confirm";
+import React, { useState } from "react"
+import Box from "@mui/material/Box"
+import Avatar from "@mui/material/Avatar"
+import Menu from "@mui/material/Menu"
+import MenuItem from "@mui/material/MenuItem"
+import ListItemIcon from "@mui/material/ListItemIcon"
+import Divider from "@mui/material/Divider"
+import IconButton from "@mui/material/IconButton"
+import Tooltip from "@mui/material/Tooltip"
+import PersonAdd from "@mui/icons-material/PersonAdd"
+import Settings from "@mui/icons-material/Settings"
+import Logout from "@mui/icons-material/Logout"
+import { Link } from "react-router"
+import { useSelector, useDispatch } from "react-redux"
+import { selectCurrentUser, logoutUserAPI } from "~/redux/user/userSlice"
+import { useConfirm } from "material-ui-confirm"
 
 export default function Profiles() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const dispatch = useDispatch();
-  const confirmLogout = useConfirm();
-  const currentUser = useSelector(selectCurrentUser);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const open = Boolean(anchorEl)
+  const dispatch = useDispatch()
+  const confirmLogout = useConfirm()
+  const currentUser = useSelector(selectCurrentUser)
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
   const handleLogout = () => {
     confirmLogout({
       title: "Are you sure want to log out?",
       confirmationText: "Cofirm",
-      cancellationText: "Cancel",
-    }).then(() => {
-      dispatch(logoutUserAPI())
-    }).catch(() => {})
+      cancellationText: "Cancel"
+    })
+      .then(() => {
+        dispatch(logoutUserAPI())
+      })
+      .catch(() => {})
   }
   return (
     <React.Fragment>
@@ -72,7 +74,7 @@ export default function Profiles() {
                 width: 32,
                 height: 32,
                 ml: -0.5,
-                mr: 1,
+                mr: 1
               },
               "&::before": {
                 content: '""',
@@ -84,10 +86,10 @@ export default function Profiles() {
                 height: 10,
                 bgcolor: "background.paper",
                 transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          },
+                zIndex: 0
+              }
+            }
+          }
         }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
@@ -96,8 +98,8 @@ export default function Profiles() {
           <MenuItem
             sx={{
               "&:hover": {
-                color: "success.light",
-              },
+                color: "success.light"
+              }
             }}
           >
             <Avatar src={currentUser?.avatar} /> Profile
@@ -125,9 +127,9 @@ export default function Profiles() {
             "&:hover": {
               color: "warning.dark",
               "& .logout-icon": {
-                color: "warning.dark",
-              },
-            },
+                color: "warning.dark"
+              }
+            }
           }}
         >
           <ListItemIcon>
@@ -137,5 +139,5 @@ export default function Profiles() {
         </MenuItem>
       </Menu>
     </React.Fragment>
-  );
+  )
 }

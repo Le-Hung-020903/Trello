@@ -15,7 +15,7 @@ import {
   selectCurrentActiveBoard
 } from "~/redux/activeBoard/activeBoardSlice"
 import { useSelector, useDispatch } from "react-redux"
-import { useParams } from "react-router-dom"
+import { useParams } from "react-router"
 import PageLoadingSpinner from "~/components/Loading/PageLoadingSpinner"
 import ActiveCard from "~/components/Modal/ActiveCard/ActiveCard"
 const Board = () => {

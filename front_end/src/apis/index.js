@@ -121,5 +121,6 @@ export const inviteUserToBoardAPI = async (data) => {
     `${API_ROOT}/v1/invitations/board`,
     data
   )
+  toast.success("Invitation sent successfully")
   return response.data.data
 }

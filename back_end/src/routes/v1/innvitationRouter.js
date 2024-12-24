@@ -17,5 +17,5 @@ router
 
 router
   .route("/board/:invitationId")
-  .get(authMiddleware.isAuthorized, innvitationController.updateBoardInvitation)
+  .put(authMiddleware.isAuthorized, innvitationController.updateBoardInvitation)
 module.exports = router

@@ -1,52 +1,55 @@
-import { Card as MuiCard } from "@mui/material";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Zoom from "@mui/material/Zoom";
-import Typography from "@mui/material/Typography";
-import React from 'react'
-import LockIcon from "@mui/icons-material/Lock";
-import Alert from "@mui/material/Alert";
-import TextField from "@mui/material/TextField";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
-import { Link, useSearchParams } from "react-router-dom"
-import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { loginUserAPI, selectCurrentUser } from "~/redux/user/userSlice";
-import FieldErrorAlert from "~/components/Form/FieldErrorAlert";
+import { Card as MuiCard } from "@mui/material"
+import Box from "@mui/material/Box"
+import Avatar from "@mui/material/Avatar"
+import Zoom from "@mui/material/Zoom"
+import Typography from "@mui/material/Typography"
+import React from "react"
+import LockIcon from "@mui/icons-material/Lock"
+import Alert from "@mui/material/Alert"
+import TextField from "@mui/material/TextField"
+import CardActions from "@mui/material/CardActions"
+import Button from "@mui/material/Button"
+import { Link, useSearchParams } from "react-router"
+import { useForm } from "react-hook-form"
+import { useDispatch, useSelector } from "react-redux"
+import { toast } from "react-toastify"
+import { useNavigate } from "react-router"
+import { loginUserAPI, selectCurrentUser } from "~/redux/user/userSlice"
+import FieldErrorAlert from "~/components/Form/FieldErrorAlert"
 import {
   FIELD_REQUIRE_MESSAGE,
   EMAIL_RULE,
   EMAIL_RULE_MESSAGE,
   PASSWORD_RULE,
-  PASSWORD_RULE_MESSAGE,
-} from "~/utils/validators";
+  PASSWORD_RULE_MESSAGE
+} from "~/utils/validators"
 const LoginForm = () => {
-  const {register, handleSubmit, formState: {errors }} = useForm()
-  
-  const user = useSelector(selectCurrentUser);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
+
+  const user = useSelector(selectCurrentUser)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   let [searchParams] = useSearchParams()
-  const registeredEmail = searchParams.get("registedEmail");
-  const verifiedEmail = searchParams.get("verifiedEmail");
+  const registeredEmail = searchParams.get("registedEmail")
+  const verifiedEmail = searchParams.get("verifiedEmail")
 
   const submitLogin = (data) => {
-      const { email, password } = data
-      toast
-        .promise(
-          dispatch(loginUserAPI({ email, password })), {
-          pending: "Logging is in progress...",
-        })
-        .then((res) => {
-          console.log(res);
-          // Nếu như không có lỗi sẽ return về /
-          if(!res.error) navigate("/")
-        });
-  };
-  
+    const { email, password } = data
+    toast
+      .promise(dispatch(loginUserAPI({ email, password })), {
+        pending: "Logging is in progress..."
+      })
+      .then((res) => {
+        console.log(res)
+        // Nếu như không có lỗi sẽ return về /
+        if (!res.error) navigate("/")
+      })
+  }
+
   return (
     <form onSubmit={handleSubmit(submitLogin)}>
       <Zoom in={true} style={{ transitionDelay: "200ms" }}>
@@ -56,7 +59,7 @@ const LoginForm = () => {
               margin: "1em",
               display: "flex",
               justifyContent: "center",
-              gap: 1,
+              gap: 1
             }}
           >
             <Avatar sx={{ bgcolor: "primary.main" }}>
@@ -69,7 +72,7 @@ const LoginForm = () => {
               display: "flex",
               justifyContent: "center",
               padding: "0 1em",
-              color: (theme) => theme.palette.grey[500],
+              color: (theme) => theme.palette.grey[500]
             }}
           >
             Author: Le Dinh Hung
@@ -80,7 +83,7 @@ const LoginForm = () => {
               display: "flex",
               justifyContent: "center",
               flexDirection: "column",
-              padding: "0 1em",
+              padding: "0 1em"
             }}
           >
             {verifiedEmail && (
@@ -130,8 +133,8 @@ const LoginForm = () => {
                   required: FIELD_REQUIRE_MESSAGE,
                   pattern: {
                     value: EMAIL_RULE,
-                    message: EMAIL_RULE_MESSAGE,
-                  },
+                    message: EMAIL_RULE_MESSAGE
+                  }
                 })}
               />
               <FieldErrorAlert errors={errors} fieldName={"email"} />
@@ -147,8 +150,8 @@ const LoginForm = () => {
                   required: FIELD_REQUIRE_MESSAGE,
                   pattern: {
                     value: PASSWORD_RULE,
-                    message: PASSWORD_RULE_MESSAGE,
-                  },
+                    message: PASSWORD_RULE_MESSAGE
+                  }
                 })}
               />
               <FieldErrorAlert errors={errors} fieldName={"password"} />
@@ -179,7 +182,7 @@ const LoginForm = () => {
         </MuiCard>
       </Zoom>
     </form>
-  );
+  )
 }
 
 export default LoginForm

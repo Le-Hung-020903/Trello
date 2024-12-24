@@ -13,13 +13,10 @@ module.exports = {
     try {
       // Người đi mời chính là req
       const inviter = await userModel.findOneById(inviterId)
-      console.log("🚀 ~ createNewBoardInvitation: ~ inviter:", inviter)
       // người được mời là lấy từ FE
       const invitee = await userModel.findOneByEmail(reqBody.inviteeEmail)
-      console.log("🚀 ~ createNewBoardInvitation: ~ invitee:", invitee)
       // Lấy board được mời vào
       const board = await boardModel.findOneById(reqBody.boardId)
-      console.log("🚀 ~ createNewBoardInvitation: ~ board:", board)
       // không tồn tại 1 trong 3 bỏ qua
       if (!invitee || !board || !inviter) {
         throw new ApiError(
@@ -76,10 +73,13 @@ module.exports = {
       if (!getBoard)
         throw new ApiError(StatusCodes.NOT_FOUND, "Board not found!")
 
-      //- Kiểm tra xem nếu status là ACCRpTED join board mà cái thằng user (invitee) đã
+      //- Kiểm tra xem nếu status là ACCRPTED và join board mà cái thằng user (invitee) đã
       // là owner hoặc member của board rồi thì trả về thông báo lỗi luôn
       //- Note: 2 mảng memberIds và ownerIds của board nó đang là kiểu ObjectID nên cho nó hết về String để check
-      const boardOwnerAndMembers = [...getBoard.ownerIds, ...getBoard.memberIds]
+      const boardOwnerAndMembers = [
+        ...getBoard.ownerIds,
+        ...getBoard.memberIds
+      ].toString()
       if (
         status === BOARD_INVITATION_STATUS.ACCEPTED &&
         boardOwnerAndMembers.includes(userId)
@@ -89,13 +89,31 @@ module.exports = {
           "You are already a member of this board!"
         )
       }
+
+      // Tạo dữ liệu để update bản ghi Invitation
       const updateData = {
         boardInvitation: {
           ...getInvitation.boardInvitation,
-          status
+          status // Status là accepted hoặc rejected do FE gửi lên
         }
       }
-      // Tạo dữ liệu để update bản ghi Invitation
+
+      // Cập nhật lại status trong bản ghi Invitation
+      const updatedInvitation = await innvitationModel.update(
+        invitationId,
+        updateData
+      )
+
+      // Nếu trường hợp accpect một lời mời thành công, thì cần phải thêm
+      // info của user (id) vào bản ghi memberIds trong collection board
+      if (
+        updatedInvitation.boardInvitation.status ===
+        BOARD_INVITATION_STATUS.ACCEPTED
+      ) {
+        await boardModel.pushMemberIds(boardId, userId)
+      }
+
+      return updatedInvitation
     } catch (e) {
       throw e
     }

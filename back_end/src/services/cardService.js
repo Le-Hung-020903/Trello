@@ -44,6 +44,12 @@ module.exports = {
           commentedAt: Date.now()
         }
         updatedCard = await cardModel.unShiftNewComment(cardId, commentData)
+      } else if (updateCard.incomingMemberInfo) {
+        // In case of adding or deleting member from the card
+        updatedCard = await cardModel.updateMembers(
+          cardId,
+          updateCard.incomingMemberInfo
+        )
       } else {
         // Các trường khác
         updatedCard = await cardModel.update(cardId, updateCard)

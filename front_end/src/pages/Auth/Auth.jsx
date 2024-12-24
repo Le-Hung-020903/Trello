@@ -1,19 +1,19 @@
-import Box from "@mui/material/Box";
-import React from 'react';
-import { Navigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import LoginForm from "./LoginForm";
-import RegisterForm from "./RegisterForm";
-import { selectCurrentUser } from "~/redux/user/userSlice";
+import Box from "@mui/material/Box"
+import React from "react"
+import { Navigate, useLocation } from "react-router"
+import { useSelector } from "react-redux"
+import LoginForm from "./LoginForm"
+import RegisterForm from "./RegisterForm"
+import { selectCurrentUser } from "~/redux/user/userSlice"
 
 const Auth = () => {
-    const location = useLocation();
-    const isLogin = location.pathname === "/login";
-    const isRegister  = location.pathname === "/register";
-    const currentUser = useSelector(selectCurrentUser);
-    if (currentUser) {
-      return <Navigate to="/" replace={true}/>
-    }
+  const location = useLocation()
+  const isLogin = location.pathname === "/login"
+  const isRegister = location.pathname === "/register"
+  const currentUser = useSelector(selectCurrentUser)
+  if (currentUser) {
+    return <Navigate to="/" replace={true} />
+  }
   return (
     <Box
       sx={{
@@ -26,13 +26,13 @@ const Auth = () => {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        boxShadow: "inset 0 0 0 2000px rgba(0, 0, 0, 0.2)",
+        boxShadow: "inset 0 0 0 2000px rgba(0, 0, 0, 0.2)"
       }}
     >
       {isLogin && <LoginForm />}
       {isRegister && <RegisterForm />}
     </Box>
-  );
+  )
 }
 
 export default Auth

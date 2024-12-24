@@ -76,14 +76,15 @@ module.exports = {
       throw new Error(e.message)
     }
   },
-  getBoards: async (userId, page, itemsPage) => {
+  getBoards: async (userId, page, itemsPage, queryFilters) => {
     try {
       if (!page) page = DEFAULT_PAGE
       if (!itemsPage) itemsPage = DEFAULT_ITEMS_PAGE
       const result = await boardModel.getBoards(
         userId,
         parseInt(page, 10),
-        parseInt(itemsPage, 10)
+        parseInt(itemsPage, 10),
+        queryFilters
       )
       return result
     } catch (e) {

@@ -1,38 +1,44 @@
-import { Card as MuiCard } from "@mui/material";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
-import Zoom from "@mui/material/Zoom";
-import Typography from "@mui/material/Typography";
-import React from "react";
-import LockIcon from "@mui/icons-material/Lock";
-import TextField from "@mui/material/TextField";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import FieldErrorAlert from "~/components/Form/FieldErrorAlert";
+import { Card as MuiCard } from "@mui/material"
+import Box from "@mui/material/Box"
+import Avatar from "@mui/material/Avatar"
+import Zoom from "@mui/material/Zoom"
+import Typography from "@mui/material/Typography"
+import React from "react"
+import LockIcon from "@mui/icons-material/Lock"
+import TextField from "@mui/material/TextField"
+import CardActions from "@mui/material/CardActions"
+import Button from "@mui/material/Button"
+import { Link, useNavigate } from "react-router"
+import { useForm } from "react-hook-form"
+import FieldErrorAlert from "~/components/Form/FieldErrorAlert"
 import {
   FIELD_REQUIRE_MESSAGE,
   EMAIL_RULE,
   EMAIL_RULE_MESSAGE,
   PASSWORD_RULE,
-  PASSWORD_RULE_MESSAGE,
-} from "~/utils/validators";
-import { registerUserAPI } from "~/apis";
-import { toast } from "react-toastify";
+  PASSWORD_RULE_MESSAGE
+} from "~/utils/validators"
+import { registerUserAPI } from "~/apis"
+import { toast } from "react-toastify"
 
 const RegisterForm = () => {
-  const {register, handleSubmit, formState: {errors }, watch} = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch
+  } = useForm()
   const navigate = useNavigate()
-    const submitRegister = (data) => {
-      const { email, password } = data
-      toast.promise(
-        registerUserAPI({ email, password }),
-        { pending: "Register is in progress..." }
-      ).then(user => {
+  const submitRegister = (data) => {
+    const { email, password } = data
+    toast
+      .promise(registerUserAPI({ email, password }), {
+        pending: "Register is in progress..."
+      })
+      .then((user) => {
         navigate(`/login?registedEmail=${user.email}`)
-      });
-    };
+      })
+  }
   return (
     <form onSubmit={handleSubmit(submitRegister)}>
       <Zoom in={true} style={{ transitionDelay: "200ms" }}>
@@ -42,7 +48,7 @@ const RegisterForm = () => {
               margin: "1em",
               display: "flex",
               justifyContent: "center",
-              gap: 1,
+              gap: 1
             }}
           >
             <Avatar sx={{ bgcolor: "primary.main" }}>
@@ -55,7 +61,7 @@ const RegisterForm = () => {
               display: "flex",
               justifyContent: "center",
               padding: "0 1em",
-              color: (theme) => theme.palette.grey[500],
+              color: (theme) => theme.palette.grey[500]
             }}
           >
             Author: Le Dinh Hung
@@ -73,8 +79,8 @@ const RegisterForm = () => {
                   required: FIELD_REQUIRE_MESSAGE,
                   pattern: {
                     value: EMAIL_RULE,
-                    message: EMAIL_RULE_MESSAGE,
-                  },
+                    message: EMAIL_RULE_MESSAGE
+                  }
                 })}
               />
               <FieldErrorAlert errors={errors} fieldName={"email"} />
@@ -90,8 +96,8 @@ const RegisterForm = () => {
                   required: FIELD_REQUIRE_MESSAGE,
                   pattern: {
                     value: PASSWORD_RULE,
-                    message: PASSWORD_RULE_MESSAGE,
-                  },
+                    message: PASSWORD_RULE_MESSAGE
+                  }
                 })}
               />
               <FieldErrorAlert errors={errors} fieldName={"password"} />
@@ -106,9 +112,9 @@ const RegisterForm = () => {
                 {...register("password_confirm", {
                   validate: (value) => {
                     if (watch("password") !== value)
-                      return "Your password don't match";
-                    return true;
-                  },
+                      return "Your password don't match"
+                    return true
+                  }
                 })}
               />
               <FieldErrorAlert errors={errors} fieldName={"password_confirm"} />
@@ -139,7 +145,7 @@ const RegisterForm = () => {
         </MuiCard>
       </Zoom>
     </form>
-  );
-};
+  )
+}
 
-export default RegisterForm;
+export default RegisterForm

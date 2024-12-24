@@ -21,8 +21,15 @@ module.exports = {
   getBoards: async (req, res, next) => {
     try {
       const userId = req.jwtDecode._id
-      const { page, itemsPage } = req.query
-      const results = await boardService.getBoards(userId, page, itemsPage)
+      const { page, itemsPage, q } = req.query
+      const queryFilters = q
+
+      const results = await boardService.getBoards(
+        userId,
+        page,
+        itemsPage,
+        queryFilters
+      )
       return successResponse(
         res,
         StatusCodes.OK,

@@ -137,7 +137,7 @@ const getDetail = async (userId, boardId) => {
         }
       ])
       .toArray()
-    return result[0]
+    return result[0] || null
   } catch (e) {
     throw new Error(e)
   }
@@ -154,6 +154,29 @@ const pushColumnOrderIds = async (column) => {
         {
           $push: {
             columnOrderIds: new ObjectId(column._id)
+          }
+        },
+        {
+          returnDocument: "after"
+        }
+      )
+    return result
+  } catch (e) {
+    throw new Error(e)
+  }
+}
+
+const pushMemberIds = async (boardId, userId) => {
+  try {
+    const result = await GET_DB()
+      .collection(BOARD_COLLECTION_NAME)
+      .findOneAndUpdate(
+        {
+          _id: new ObjectId(boardId)
+        },
+        {
+          $push: {
+            memberIds: new ObjectId(userId)
           }
         },
         {
@@ -221,7 +244,7 @@ const deleteOneColumnById = async (column) => {
   }
 }
 
-const getBoards = async (userId, page, itemsPage) => {
+const getBoards = async (userId, page, itemsPage, queryFilters) => {
   try {
     const queryConditions = [
       // Điều kiện 1: Board chưa bị xoá
@@ -234,6 +257,21 @@ const getBoards = async (userId, page, itemsPage) => {
         ]
       }
     ]
+
+    // Xử lý query filter cho từng case search board
+    if (queryFilters) {
+      Object.keys(queryFilters).forEach((key) => {
+        // queryFilters[key] ví dụ queryFilters[title] nếu phía FE đẩy lên q[title]
+
+        // Phân biệt chữ hoa, chữ thường
+        // queryConditions.push({ [key]: { $regex: queryFilters[key] } })
+
+        // Không phân biệt chữ hoa, thường
+        queryConditions.push({
+          [key]: { $regex: new RegExp(queryFilters[key], "i") }
+        })
+      })
+    }
 
     const query = await GET_DB()
       .collection(BOARD_COLLECTION_NAME)
@@ -294,5 +332,6 @@ module.exports = {
   pushColumnOrderIds,
   update,
   deleteOneColumnById,
-  getBoards
+  getBoards,
+  pushMemberIds
 }

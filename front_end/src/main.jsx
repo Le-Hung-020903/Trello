@@ -13,7 +13,7 @@ import { store } from "./redux/store"
 import { Provider } from "react-redux"
 
 // Cấu hình react router dom với BrowserRouter
-import { BrowserRouter as Router } from "react-router-dom"
+import { BrowserRouter as Router } from "react-router"
 
 // Cấu hình Redux- Persist
 import { PersistGate } from "redux-persist/integration/react"
